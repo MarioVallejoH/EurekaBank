@@ -1,7 +1,7 @@
 <?php 
 //incluir la conexion de base de datos
 require "../config/Conexion.php";
-class Usuario{
+class Empleado{
 
 
 	//implementamos nuestro constructor
@@ -13,12 +13,12 @@ public function __construct(){
 public function insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clave,$imagen,$permisos){
 	$sql="INSERT INTO usuario (nombre,tipo_documento,num_documento,direccion,telefono,email,cargo,login,clave,imagen,condicion) VALUES ('$nombre','$tipo_documento','$num_documento','$direccion','$telefono','$email','$cargo','$login','$clave','$imagen','1')";
 	//return ejecutarConsulta($sql);
-	 $idusuarionew=ejecutarConsulta_retornarID($sql);
+	 $id_empleadonew=ejecutarConsulta_retornarID($sql);
 	 $num_elementos=0;
 	 $sw=true;
 	 while ($num_elementos < count($permisos)) {
 
-	 	$sql_detalle="INSERT INTO usuario_permiso (idusuario,idpermiso) VALUES('$idusuarionew','$permisos[$num_elementos]')";
+	 	$sql_detalle="INSERT INTO usuario_permiso (id_empleado,idpermiso) VALUES('$id_empleadonew','$permisos[$num_elementos]')";
 
 	 	ejecutarConsulta($sql_detalle) or $sw=false;
 
@@ -27,20 +27,20 @@ public function insertar($nombre,$tipo_documento,$num_documento,$direccion,$tele
 	 return $sw;
 }
 
-public function editar($idusuario,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clave,$imagen,$permisos){
+public function editar($id_empleado,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clave,$imagen,$permisos){
 	$sql="UPDATE usuario SET nombre='$nombre',tipo_documento='$tipo_documento',num_documento='$num_documento',direccion='$direccion',telefono='$telefono',email='$email',cargo='$cargo',login='$login',clave='$clave',imagen='$imagen' 
-	WHERE idusuario='$idusuario'";
+	WHERE id_empleado='$id_empleado'";
 	 ejecutarConsulta($sql);
 
 	 //eliminar permisos asignados
-	 $sqldel="DELETE FROM usuario_permiso WHERE idusuario='$idusuario'";
+	 $sqldel="DELETE FROM usuario_permiso WHERE id_empleado='$id_empleado'";
 	 ejecutarConsulta($sqldel);
 
 	 	 $num_elementos=0;
 	 $sw=true;
 	 while ($num_elementos < count($permisos)) {
 
-	 	$sql_detalle="INSERT INTO usuario_permiso (idusuario,idpermiso) VALUES('$idusuario','$permisos[$num_elementos]')";
+	 	$sql_detalle="INSERT INTO usuario_permiso (id_empleado,idpermiso) VALUES('$id_empleado','$permisos[$num_elementos]')";
 
 	 	ejecutarConsulta($sql_detalle) or $sw=false;
 
@@ -48,30 +48,33 @@ public function editar($idusuario,$nombre,$tipo_documento,$num_documento,$direcc
 	 }
 	 return $sw;
 }
-public function desactivar($idusuario){
-	$sql="UPDATE usuario SET condicion='0' WHERE idusuario='$idusuario'";
+public function desactivar($id_empleado){
+	$sql="UPDATE usuario SET condicion='0' WHERE id_empleado='$id_empleado'";
 	return ejecutarConsulta($sql);
 }
-public function activar($idusuario){
-	$sql="UPDATE usuario SET condicion='1' WHERE idusuario='$idusuario'";
+public function activar($id_empleado){
+	$sql="UPDATE usuario SET condicion='1' WHERE id_empleado='$id_empleado'";
 	return ejecutarConsulta($sql);
 }
 
 //metodo para mostrar registros
-public function mostrar($idusuario){
-	$sql="SELECT * FROM usuario WHERE idusuario='$idusuario'";
+public function mostrar($id_empleado){
+	$sql="SELECT p.nombre,p.primer_apellido,p.segundo_apellido,p.num_documento,p.ciudad,e.fecha_creacion_emp,e.fecha_baja_emp,s.nombre_sucur,
+	e.id_empleado,e.telefono_emp, e.emai,u.nombre_usu,u.contraseña,p.direccion FROM persona p INNER JOIN empleados e ON e.id_persona=p.id_persona 
+	INNER JOIN sucursales s ON s.id_sucur=e.id_sucur INNER JOIN usuarios u ON u.id_usuario=e.id_usuario WHERE e.id_empleado='$id_empleado'";
 	return ejecutarConsultaSimpleFila($sql);
 }
 
 //listar registros
 public function listar(){
-	$sql="SELECT * FROM usuario";
+	$sql="SELECT p.nombre,p.primer_apellido,p.segundo_apellido,p.num_documento,p.ciudad,e.fecha_creacion_emp,e.fecha_baja_emp,s.nombre_sucur,
+	e.id_empleado FROM persona p INNER JOIN empleados e ON e.id_persona=p.id_persona INNER JOIN sucursales s ON s.id_sucur=e.id_sucur";
 	return ejecutarConsulta($sql);
 }
 
 //metodo para listar permmisos marcados de un usuario especifico
-public function listarmarcados($idusuario){
-	$sql="SELECT * FROM usuario_permiso WHERE idusuario='$idusuario'";
+public function listarmarcados($id_empleado){
+	$sql="SELECT * FROM usuario_permiso WHERE id_empleado='$id_empleado'";
 	return ejecutarConsulta($sql);
 }
 
@@ -79,7 +82,7 @@ public function listarmarcados($idusuario){
 
 public function verificar($login,$clave){
 
-	$sql="SELECT idusuario,nombre,tipo_documento,num_documento,telefono,email,cargo,imagen,login FROM usuario WHERE login='$login' AND clave='$clave' AND condicion='1'";
+	$sql="SELECT id_usuario,nombre_usu,id_rol AS rol  FROM usuarios WHERE nombre_usu='$login' AND contraseña_usu='$clave' AND estado='1'";
 	 return ejecutarConsulta($sql);
 
 }

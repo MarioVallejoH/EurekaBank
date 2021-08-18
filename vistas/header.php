@@ -8,7 +8,11 @@ if (strlen(session_id())<1)
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>SISVentas | Escritorio</title>
+
+  <!-- definimos el titulo -->
+  <title>EurekaBank | Escritorio</title>
+  <!-- definimos el icono -->
+  <link rel="icon"  href="../favicon.ico"/>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -29,16 +33,17 @@ if (strlen(session_id())<1)
 <link rel="stylesheet" href="../public/css/bootstrap-select.min.css">
 
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-white sidebar-mini">
 <div class="wrapper">
 
   <header class="main-header">
     <!-- Logo -->
     <a href="escritorio.php" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>SIS</b> V</span>
+      <span class="logo-mini"><b>E</b>B</span>
+      
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>SIS</b> VENTAS</span>
+      <span class="logo-lg"><b>Eureka</b>Bank</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -52,18 +57,14 @@ if (strlen(session_id())<1)
 
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="../files/usuarios/<?php echo $_SESSION['imagen']; ?>" class="user-image" alt="User Image">
+              <img src="../files/images/Img.png" class="user-image" alt="User Image">
               <span class="hidden-xs"><?php echo $_SESSION['nombre']; ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="../files/usuarios/<?php echo $_SESSION['imagen']; ?>" class="img-circle" alt="User Image">
+                <img src="../files/images/Img.png" class="img-circle" alt="User Image">
 
-                <p>
-                  angel totocayo cayllahua-Desarrollo de software
-                  <small>Agosto 2018</small>
-                </p>
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
@@ -92,116 +93,22 @@ if (strlen(session_id())<1)
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
 
-<br>
-       <?php 
-if ($_SESSION['escritorio']==1) {
-  echo ' <li><a href="escritorio.php"><i class="fa  fa-dashboard (alias)"></i> <span>Escritorio</span></a>
-        </li>';
-}
-        ?>
-               <?php 
-if ($_SESSION['almacen']==1) {
-  echo ' <li class="treeview">
-          <a href="#">
-            <i class="fa fa-laptop"></i> <span>Almacen</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="articulo.php"><i class="fa fa-circle-o"></i> Articulos</a></li>
-            <li><a href="categoria.php"><i class="fa fa-circle-o"></i> Categorias</a></li>
-          </ul>
-        </li>';
-}
-        ?>
-               <?php 
-if ($_SESSION['compras']==1) {
-  echo ' <li class="treeview">
-          <a href="#">
-            <i class="fa fa-th"></i> <span>Compras</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="ingreso.php"><i class="fa fa-circle-o"></i> Ingresos</a></li>
-            <li><a href="proveedor.php"><i class="fa fa-circle-o"></i> Proveedores</a></li>
-          </ul>
-        </li>';
-}
-        ?>
-        
-               <?php 
-if ($_SESSION['ventas']==1) {
-  echo '<li class="treeview">
-          <a href="#">
-            <i class="fa fa-shopping-cart"></i> <span>Ventas</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="venta.php"><i class="fa fa-circle-o"></i> ventas</a></li>
-            <li><a href="cliente.php"><i class="fa fa-circle-o"></i> clientes</a></li>
-          </ul>
-        </li>';
-}
+        <br>
+        <li>
+          <a href="escritorio.php"><i class="fa  fa-dashboard (alias)"></i> <span>Escritorio</span></a>
+        </li>
+      
+        <?php 
+          if ($_SESSION['rol']==1) {
+          echo '<li><a href="empleados.php"><i class="fa  fa-user (alias)"></i> <span>Empleados</span></a>
+            </li>';
+          }
         ?>
 
-                             <?php 
-if ($_SESSION['acceso']==1) {
-  echo '  <li class="treeview">
-          <a href="#">
-            <i class="fa fa-folder"></i> <span>Acceso</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="usuario.php"><i class="fa fa-circle-o"></i> Usuarios</a></li>
-            <li><a href="permiso.php"><i class="fa fa-circle-o"></i> Permisos</a></li>
-          </ul>
-        </li>';
-}
-        ?>  
-                                     <?php 
-if ($_SESSION['consultac']==1) {
-  echo '     <li class="treeview">
-          <a href="#">
-            <i class="fa fa-bar-chart"></i> <span>Consulta Compras</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="comprasfecha.php"><i class="fa fa-circle-o"></i>Compras por fechas</a></li>
-          </ul>
-        </li>';
-}
-        ?>  
-              
-                                                <?php 
-if ($_SESSION['consultav']==1) {
-  echo '<li class="treeview">
-          <a href="#">
-            <i class="fa fa-bar-chart"></i> <span>Consulta Ventas</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="ventasfechacliente.php"><i class="fa fa-circle-o"></i> Consulta Ventas</a></li>
-
-          </ul>
-        </li>';
-}
-        ?>     
+ 
             
         
-        <li><a href="#"><i class="fa fa-question-circle"></i> <span>Ayuda</span><small class="label pull-right bg-yellow">PDF</small></a></li>
-        <li><a href="#"><i class="fa  fa-exclamation-circle"></i> <span>Ayuda</span><small class="label pull-right bg-yellow">IT</small></a></li>
       </ul>
     </section>
-    <!-- /.sidebar -->
-  </aside>
+  <!-- /.sidebar -->
+</aside>

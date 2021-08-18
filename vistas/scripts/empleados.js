@@ -7,18 +7,25 @@ function init(){
 
    $("#formulario").on("submit",function(e){
    	guardaryeditar(e);
-   });
+   })
+
+   $("#imagenmuestra").hide();
+
 }
 
 //funcion limpiar
 function limpiar(){
-
 	$("#nombre").val("");
-	$("#num_documento").val("");
+    $("#num_documento").val("");
 	$("#direccion").val("");
 	$("#telefono").val("");
 	$("#email").val("");
-	$("#idpersona").val("");
+	$("#cargo").val("");
+	$("#login").val("");
+	$("#clave").val("");
+	$("#imagenmuestra").attr("src","");
+	$("#imagenactual").val("");
+	$("#idusuario").val("");
 }
 
 //funcion mostrar formulario
@@ -56,7 +63,7 @@ function listar(){
 		],
 		"ajax":
 		{
-			url:'../ajax/persona.php?op=listarp',
+			url:'../ajax/usuario.php?op=listar',
 			type: "get",
 			dataType : "json",
 			error:function(e){
@@ -75,7 +82,7 @@ function guardaryeditar(e){
      var formData=new FormData($("#formulario")[0]);
 
      $.ajax({
-     	url: "../ajax/persona.php?op=guardaryeditar",
+     	url: "../ajax/usuario.php?op=guardaryeditar",
      	type: "POST",
      	data: formData,
      	contentType: false,
@@ -91,31 +98,45 @@ function guardaryeditar(e){
      limpiar();
 }
 
-function mostrar(idpersona){
-	$.post("../ajax/persona.php?op=mostrar",{idpersona : idpersona},
+function mostrar(idusuario){
+	$.post("../ajax/usuario.php?op=mostrar",{idusuario : idusuario},
 		function(data,status)
 		{
 			data=JSON.parse(data);
 			mostrarform(true);
 
 			$("#nombre").val(data.nombre);
-			$("#tipo_documento").val(data.tipo_documento);
-			$("#tipo_documento").selectpicker('refresh');
-			$("#num_documento").val(data.num_documento);
-			$("#direccion").val(data.direccion);
-			$("#telefono").val(data.telefono);
-			$("#email").val(data.email);
-			$("#idpersona").val(data.idpersona);
-		})
-}
+			$("#primer_apellido").val(data.primer_apellido);
+			$("#segundo_apellido").val(data.segundo_apellido);
+            $("#num_documento").val(data.num_documento);
+            $("#ciudad").val(data.ciudad);
+            $("#direccion").val(data.direccion);
+            $("#telefono").val(data.telefono_emp);
+            $("#email").val(data.correo_emp);
+            $("#login").val(data.login);
+            $("#clave").val("Digita una nueva contraseña");
+            $("#id_empleado").val(data.id_empleado);
+		});
+	
+};
 
 
 //funcion para desactivar
-function eliminar(idpersona){
-	bootbox.confirm("¿Esta seguro de eliminar este dato?", function(result){
+function desactivar(idusuario){
+	bootbox.confirm("¿Esta seguro de desactivar este dato?", function(result){
 		if (result) {
+			$.post("../ajax/usuario.php?op=desactivar", {idusuario : idusuario}, function(e){
+				bootbox.alert(e);
+				tabla.ajax.reload();
+			});
+		}
+	})
+}
 
-			$.post("../ajax/persona.php?op=eliminar", {idpersona : idpersona }, function(e){
+function activar(idusuario){
+	bootbox.confirm("¿Esta seguro de activar este dato?" , function(result){
+		if (result) {
+			$.post("../ajax/usuario.php?op=activar", {idusuario : idusuario}, function(e){
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});

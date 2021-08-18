@@ -1,10 +1,10 @@
 <?php 
 session_start();
-require_once "../modelos/Usuario.php";
+require_once "../modelos/empleados.php";
 
-$usuario=new Usuario();
+$empleado=new empleado();
 
-$idusuario=isset($_POST["idusuario"])? limpiarCadena($_POST["idusuario"]):"";
+$idempleado=isset($_POST["idempleado"])? limpiarCadena($_POST["idempleado"]):"";
 $nombre=isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
 $tipo_documento=isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
 $num_documento=isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
@@ -25,52 +25,51 @@ switch ($_GET["op"]) {
 		$ext=explode(".", $_FILES["imagen"]["name"]);
 		if ($_FILES['imagen']['type']=="image/jpg" || $_FILES['imagen']['type']=="image/jpeg" || $_FILES['imagen']['type']=="image/png") {
 			$imagen=round(microtime(true)).'.'. end($ext);
-			move_uploaded_file($_FILES["imagen"]["tmp_name"], "../files/usuarios/".$imagen);
+			move_uploaded_file($_FILES["imagen"]["tmp_name"], "../files/empleados/".$imagen);
 		}
 	}
 
 	//Hash SHA256 para la contraseña
 	$clavehash=hash("SHA256", $clave);
-	if (empty($idusuario)) {
-		$rspta=$usuario->insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clavehash,$imagen,$_POST['permiso']);
-		echo $rspta ? "Datos registrados correctamente" : "No se pudo registrar todos los datos del usuario";
+	if (empty($idempleado)) {
+		$rspta=$empleado->insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clavehash,$imagen,$_POST['permiso']);
+		echo $rspta ? "Datos registrados correctamente" : "No se pudo registrar todos los datos del empleado";
 	}else{
-		$rspta=$usuario->editar($idusuario,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clavehash,$imagen,$_POST['permiso']);
+		$rspta=$empleado->editar($idempleado,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clavehash,$imagen,$_POST['permiso']);
 		echo $rspta ? "Datos actualizados correctamente" : "No se pudo actualizar los datos";
 	}
 	break;
 	
 
 	case 'desactivar':
-	$rspta=$usuario->desactivar($idusuario);
+	$rspta=$empleado->desactivar($idempleado);
 	echo $rspta ? "Datos desactivados correctamente" : "No se pudo desactivar los datos";
 	break;
 
 	case 'activar':
-	$rspta=$usuario->activar($idusuario);
+	$rspta=$empleado->activar($idempleado);
 	echo $rspta ? "Datos activados correctamente" : "No se pudo activar los datos";
 	break;
 	
 	case 'mostrar':
-	$rspta=$usuario->mostrar($idusuario);
+	$rspta=$empleado->mostrar($idempleado);
 	echo json_encode($rspta);
 	break;
 
 	case 'listar':
-	$rspta=$usuario->listar();
+	$rspta=$empleado->listar();
 	$data=Array();
 
 	while ($reg=$rspta->fetch_object()) {
 		$data[]=array(
-			"0"=>($reg->condicion)?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->idusuario.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-danger btn-xs" onclick="desactivar('.$reg->idusuario.')"><i class="fa fa-close"></i></button>':'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->idusuario.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-primary btn-xs" onclick="activar('.$reg->idusuario.')"><i class="fa fa-check"></i></button>',
-			"1"=>$reg->nombre,
-			"2"=>$reg->tipo_documento,
+			"0"=>(is_null($reg->fecha_baja_emp))?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_empleado.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-danger btn-xs" onclick="desactivar('.$reg->id_empleado.')"><i class="fa fa-close"></i></button>':'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_empleado.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-primary btn-xs" onclick="activar('.$reg->id_empleado.')"><i class="fa fa-check"></i></button>',
+			"1"=>$reg->primer_apellido." ".$reg->segundo_apellido,
+			"2"=>$reg->nombre,
 			"3"=>$reg->num_documento,
-			"4"=>$reg->telefono,
-			"5"=>$reg->email,
-			"6"=>$reg->login,
-			"7"=>"<img src='../files/usuarios/".$reg->imagen."' height='50px' width='50px'>",
-			"8"=>($reg->condicion)?'<span class="label bg-green">Activado</span>':'<span class="label bg-red">Desactivado</span>'
+			"4"=>$reg->ciudad,
+			"5"=>$reg->fecha_creacion_emp,
+			"6"=>$reg->nombre_sucur,
+			"7"=>(is_null($reg->fecha_baja_emp))?'<span class="label bg-green">Activado</span>':'<span class="label bg-red">Desactivado</span>'
 		);
 	}
 
@@ -89,7 +88,7 @@ switch ($_GET["op"]) {
 	$rspta=$permiso->listar();
 //obtener permisos asigandos
 	$id=$_GET['id'];
-	$marcados=$usuario->listarmarcados($id);
+	$marcados=$empleado->listarmarcados($id);
 	$valores=array();
 
 //almacenar permisos asigandos
@@ -104,45 +103,30 @@ switch ($_GET["op"]) {
 	break;
 
 	case 'verificar':
-	//validar si el usuario tiene acceso al sistema
+	//validar si el empleado tiene acceso al sistema
 	$logina=$_POST['logina'];
 	$clavea=$_POST['clavea'];
-
 	//Hash SHA256 en la contraseña
 	$clavehash=hash("SHA256", $clavea);
-	
-	$rspta=$usuario->verificar($logina, $clavehash);
 
+	// echo $clavehash;
+	
+	// se hace uso de el modelo de empleado para verificarlo
+	$rspta=$empleado->verificar($logina, $clavehash);
+	
+	// verificamos si la consulta fue exitosa
 	$fetch=$rspta->fetch_object();
 	if (isset($fetch)) {
-		# Declaramos la variables de sesion
-		$_SESSION['idusuario']=$fetch->idusuario;
-		$_SESSION['nombre']=$fetch->nombre;
-		$_SESSION['imagen']=$fetch->imagen;
-		$_SESSION['login']=$fetch->login;
-
-		//obtenemos los permisos
-		$marcados=$usuario->listarmarcados($fetch->idusuario);
-
-		//declaramos el array para almacenar todos los permisos
-		$valores=array();
-
-		//almacenamos los permisos marcados en al array
-		while ($per = $marcados->fetch_object()) {
-			array_push($valores, $per->idpermiso);
-		}
-
-		//determinamos lo accesos al usuario
-		in_array(1, $valores)?$_SESSION['escritorio']=1:$_SESSION['escritorio']=0;
-		in_array(2, $valores)?$_SESSION['almacen']=1:$_SESSION['almacen']=0;
-		in_array(3, $valores)?$_SESSION['compras']=1:$_SESSION['compras']=0;
-		in_array(4, $valores)?$_SESSION['ventas']=1:$_SESSION['ventas']=0;
-		in_array(5, $valores)?$_SESSION['acceso']=1:$_SESSION['acceso']=0;
-		in_array(6, $valores)?$_SESSION['consultac']=1:$_SESSION['consultac']=0;
-		in_array(7, $valores)?$_SESSION['consultav']=1:$_SESSION['consultav']=0;
+	// 	# Declaramos la variables de sesion
+		$_SESSION['id_empleado']=$fetch->idempleado;
+		$_SESSION['nombre']=$fetch->nombre_usu;
+		$_SESSION['rol']=$fetch->rol;
 
 	}
-	echo json_encode($fetch);
+
+	// retornamos algo para reportar el login exitoso
+	echo $fetch->nombre_usu;
+
 
 
 	break;
