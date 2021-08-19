@@ -18,7 +18,11 @@ $query=$conexion->query($sql);
 return $query;
 
 	}
-
+	Function ejecutarConsultas($sql){ 
+		global $conexion;
+		$query=$conexion->multi_query($sql);
+		return $query;
+	}
 	function ejecutarConsultaSimpleFila($sql){
 global $conexion;
 $query=$conexion->query($sql);

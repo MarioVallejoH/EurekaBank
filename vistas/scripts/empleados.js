@@ -98,13 +98,13 @@ function guardaryeditar(e){
      limpiar();
 }
 
-function mostrar(idusuario){
-	$.post("../ajax/usuario.php?op=mostrar",{idusuario : idusuario},
+function mostrar(id_empleado){
+	$.post("../ajax/usuario.php?op=mostrar",{id_empleado : id_empleado},
 		function(data,status)
 		{
 			data=JSON.parse(data);
 			mostrarform(true);
-
+			console.log(data.nombre);
 			$("#nombre").val(data.nombre);
 			$("#primer_apellido").val(data.primer_apellido);
 			$("#segundo_apellido").val(data.segundo_apellido);
@@ -113,7 +113,7 @@ function mostrar(idusuario){
             $("#direccion").val(data.direccion);
             $("#telefono").val(data.telefono_emp);
             $("#email").val(data.correo_emp);
-            $("#login").val(data.login);
+            $("#login").val(data.nombre_usu);
             $("#clave").val("Digita una nueva contraseña");
             $("#id_empleado").val(data.id_empleado);
 		});
@@ -122,26 +122,29 @@ function mostrar(idusuario){
 
 
 //funcion para desactivar
-function desactivar(idusuario){
-	bootbox.confirm("¿Esta seguro de desactivar este dato?", function(result){
-		if (result) {
-			$.post("../ajax/usuario.php?op=desactivar", {idusuario : idusuario}, function(e){
-				bootbox.alert(e);
-				tabla.ajax.reload();
-			});
-		}
+function desactivar(id_empleado, id_usuario){
+	// console.log(id_usuario);
+	// bootbox.confirm("¿Esta seguro de desactivar este empleado?", function(result){
+		// if (result) {
+	$.post("../ajax/usuario.php?op=desactivar", {id_empleado : id_empleado,id_usuario : id_usuario}, function(e){
+		// bootbox.alert(e);
+		console.log(e);
+		tabla.ajax.reload();
+		// 	});
+		// }
 	})
 }
 
-function activar(idusuario){
-	bootbox.confirm("¿Esta seguro de activar este dato?" , function(result){
-		if (result) {
-			$.post("../ajax/usuario.php?op=activar", {idusuario : idusuario}, function(e){
-				bootbox.alert(e);
+function activar(id_empleado,id_usuario){
+	// bootbox.confirm("¿Esta seguro de activar este empleado?" , function(result){
+	// 	if (result) {
+			$.post("../ajax/usuario.php?op=activar", {id_empleado : id_empleado,id_usuario : id_usuario}, function(e){
+				// bootbox.alert(e);
+				console.log(e);
 				tabla.ajax.reload();
 			});
-		}
-	})
+	// 	}
+	// })
 }
 
 

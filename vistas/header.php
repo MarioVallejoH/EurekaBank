@@ -10,7 +10,7 @@ if (strlen(session_id())<1)
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <!-- definimos el titulo -->
-  <title>EurekaBank | Escritorio</title>
+  <title>EurekaBank | Inicio</title>
   <!-- definimos el icono -->
   <link rel="icon"  href="../favicon.ico"/>
   <!-- Tell the browser to be responsive to screen width -->
@@ -94,18 +94,16 @@ if (strlen(session_id())<1)
       <ul class="sidebar-menu" data-widget="tree">
 
         <br>
-        <li>
-          <a href="escritorio.php"><i class="fa  fa-dashboard (alias)"></i> <span>Escritorio</span></a>
-        </li>
       
-        <?php 
-          if ($_SESSION['rol']==1) {
-          echo '<li><a href="empleados.php"><i class="fa  fa-user (alias)"></i> <span>Empleados</span></a>
-            </li>';
-          }
-        ?>
+      
+          <?php 
+            if ($_SESSION['rol']==1) {
+            echo '<li><a href="empleados.php"><i class="fa  fa-user (alias)"></i> <span>Empleados</span></a>
+              </li>';
+            }
+          ?>
 
- 
+        </br>
             
         
       </ul>

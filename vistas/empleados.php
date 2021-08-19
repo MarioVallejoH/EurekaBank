@@ -57,6 +57,7 @@ if ($_SESSION['rol']==1) {
     <div class="form-group col-lg-6 col-md-6 col-xs-12">
       <label for="">Nombre(*):</label>
       <input class="form-control" type="hidden" name="id_empleado" id="id_empleado">
+      <input class="form-control" type="hidden" name="id_usuario" id="id_usuario">
       <input class="form-control" type="text" name="nombre" id="nombre" maxlength="100" placeholder="Nombre" required>
       <input class="form-control" type="text" name="primer_apellido" id="primer_apellido" maxlength="30" placeholder="Primer apellido" required>
       <input class="form-control" type="text" name="segundo_apellido" id="segundo_apellido" maxlength="30" placeholder="Segundo apellido" required>
