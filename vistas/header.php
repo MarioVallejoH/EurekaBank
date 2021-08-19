@@ -38,7 +38,18 @@ if (strlen(session_id())<1)
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="escritorio.php" class="logo">
+    
+    <!-- href basado en el rol de el usuario -->
+    <a href= <?php 
+            if ($_SESSION['rol']==1) {
+              echo 'empleados.php';
+            }elseif($_SESSION['rol']==2){
+              echo 'clientes.php';
+            }else{
+              echo 'cliente_cuentas.php';
+            }
+          ?> 
+        class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>E</b>B</span>
       
@@ -63,8 +74,8 @@ if (strlen(session_id())<1)
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="../files/images/Img.png" class="img-circle" alt="User Image">
-
+                <img src="../files/images/Img.png" class="img-fluid" alt="User Image">
+               
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
@@ -72,7 +83,7 @@ if (strlen(session_id())<1)
                   <a href="#" class="btn btn-default btn-flat">Perfil</a>
                 </div>
                 <div class="pull-right">
-                  <a href="../ajax/usuario.php?op=salir" class="btn btn-default btn-flat">Salir</a>
+                  <a href="../ajax/login.php?op=salir" class="btn btn-default btn-flat">Salir</a>
                 </div>
               </li>
             </ul>
@@ -99,6 +110,19 @@ if (strlen(session_id())<1)
           <?php 
             if ($_SESSION['rol']==1) {
             echo '<li><a href="empleados.php"><i class="fa  fa-user (alias)"></i> <span>Empleados</span></a>
+              </li>';
+            }
+          ?>
+          <?php 
+            if ($_SESSION['rol']==1 OR $_SESSION['rol']==2) {
+            echo '<li><a href="clientes.php"><i class="fa  fa-user (alias)"></i> <span>Clientes - Datos </span></a>
+              </li>';
+            }
+          ?>
+
+          <?php 
+            if ($_SESSION['rol']==1 OR $_SESSION['rol']==3) {
+            echo '<li><a href="cliente_cuentas.php"><i class="fa  fa-table (alias)"></i> <span>Cuentas - Cliente </span></a>
               </li>';
             }
           ?>

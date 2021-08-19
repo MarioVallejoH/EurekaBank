@@ -1,19 +1,24 @@
 <?php 
-require_once "../modelos/Venta.php";
+require_once "../modelos/cuenta.php";
+require_once "../modelos/clientes.php";
+
+// verificar que se este logeado
 if (strlen(session_id())<1) 
 	session_start();
 
-$venta = new Venta();
+$cuenta = new cuenta();
 
-$idventa=isset($_POST["idventa"])? limpiarCadena($_POST["idventa"]):"";
-$idcliente=isset($_POST["idcliente"])? limpiarCadena($_POST["idcliente"]):"";
-$idusuario=$_SESSION["idusuario"];
-$tipo_comprobante=isset($_POST["tipo_comprobante"])? limpiarCadena($_POST["tipo_comprobante"]):"";
-$serie_comprobante=isset($_POST["serie_comprobante"])? limpiarCadena($_POST["serie_comprobante"]):"";
-$num_comprobante=isset($_POST["num_comprobante"])? limpiarCadena($_POST["num_comprobante"]):"";
-$fecha_hora=isset($_POST["fecha_hora"])? limpiarCadena($_POST["fecha_hora"]):"";
-$impuesto=isset($_POST["impuesto"])? limpiarCadena($_POST["impuesto"]):"";
-$total_venta=isset($_POST["total_venta"])? limpiarCadena($_POST["total_venta"]):"";
+$cliente = new cliente();
+
+// $idventa=isset($_POST["idventa"])? limpiarCadena($_POST["idventa"]):"";
+// $idcliente=isset($_POST["idcliente"])? limpiarCadena($_POST["idcliente"]):"";
+// $idusuario=$_SESSION["idusuario"];
+// $tipo_comprobante=isset($_POST["tipo_comprobante"])? limpiarCadena($_POST["tipo_comprobante"]):"";
+// $serie_comprobante=isset($_POST["serie_comprobante"])? limpiarCadena($_POST["serie_comprobante"]):"";
+// $num_comprobante=isset($_POST["num_comprobante"])? limpiarCadena($_POST["num_comprobante"]):"";
+// $fecha_hora=isset($_POST["fecha_hora"])? limpiarCadena($_POST["fecha_hora"]):"";
+// $impuesto=isset($_POST["impuesto"])? limpiarCadena($_POST["impuesto"]):"";
+// $total_venta=isset($_POST["total_venta"])? limpiarCadena($_POST["total_venta"]):"";
 
 
 
@@ -22,7 +27,7 @@ $total_venta=isset($_POST["total_venta"])? limpiarCadena($_POST["total_venta"]):
 switch ($_GET["op"]) {
 	case 'guardaryeditar':
 	if (empty($idventa)) {
-		$rspta=$venta->insertar($idcliente,$idusuario,$tipo_comprobante,$serie_comprobante,$num_comprobante,$fecha_hora,$impuesto,$total_venta,$_POST["idarticulo"],$_POST["cantidad"],$_POST["precio_venta"],$_POST["descuento"]); 
+		$rspta=$cuenta->insertar($idcliente,$idusuario,$tipo_comprobante,$serie_comprobante,$num_comprobante,$fecha_hora,$impuesto,$total_venta,$_POST["idarticulo"],$_POST["cantidad"],$_POST["precio_venta"],$_POST["descuento"]); 
 		echo $rspta ? "Datos registrados correctamente" : "No se pudo registrar los datos";
 	}else{
         
@@ -31,12 +36,12 @@ switch ($_GET["op"]) {
 	
 
 	case 'anular':
-		$rspta=$venta->anular($idventa);
+		$rspta=$cuenta->anular($idventa);
 		echo $rspta ? "Ingreso anulado correctamente" : "No se pudo anular el ingreso";
 		break;
 	
 	case 'mostrar':
-		$rspta=$venta->mostrar($idventa);
+		$rspta=$cuenta->mostrar($idventa);
 		echo json_encode($rspta);
 		break;
 
@@ -44,7 +49,7 @@ switch ($_GET["op"]) {
 		//recibimos el idventa
 		$id=$_GET['id'];
 
-		$rspta=$venta->listarDetalle($id);
+		$rspta=$cuenta->listarDetalle($id);
 		$total=0;
 		echo ' <thead style="background-color:#A9D0F5">
         <th>Opciones</th>
@@ -75,27 +80,32 @@ switch ($_GET["op"]) {
 		break;
 
     case 'listar':
-		$rspta=$venta->listar();
-		$data=Array();
 
+		// obtener el id del cliente enviado por post
+		$id_cliente = isset($_POST["id_cliente"])? limpiarCadena($_POST["id_cliente"]):"";
+
+		// en caso de que el cliente sea el que realiza la accion
+		if(empty($id_cliente)){
+			$rspta = $cliente->obtener_id($_SESSION['id_usuario']);
+			$reg=$rspta->fetch_object();
+			$id_cliente = $reg->id_cliente;
+		}
+		
+
+		$rspta=$cuenta->listar_cuentas_cliente($id_cliente);
+		$data=Array();
+		// echo $rspta;
 		while ($reg=$rspta->fetch_object()) {
-                 if ($reg->tipo_comprobante=='Ticket') {
-                 	$url='../reportes/exTicket.php?id=';
-                 }else{
-                    $url='../reportes/exFactura.php?id=';
-                 }
 
 			$data[]=array(
-            "0"=>(($reg->estado=='Aceptado')?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->idventa.')"><i class="fa fa-eye"></i></button>'.' '.'<button class="btn btn-danger btn-xs" onclick="anular('.$reg->idventa.')"><i class="fa fa-close"></i></button>':'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->idventa.')"><i class="fa fa-eye"></i></button>').
-            '<a target="_blank" href="'.$url.$reg->idventa.'"> <button class="btn btn-info btn-xs"><i class="fa fa-file"></i></button></a>',
-            "1"=>$reg->fecha,
-            "2"=>$reg->cliente,
-            "3"=>$reg->usuario,
-            "4"=>$reg->tipo_comprobante,
-            "5"=>$reg->serie_comprobante. '-' .$reg->num_comprobante,
-            "6"=>$reg->total_venta,
-            "7"=>($reg->estado=='Aceptado')?'<span class="label bg-green">Aceptado</span>':'<span class="label bg-red">Anulado</span>'
-              );
+            "0"=>(($reg->estado_cta==1)?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_cta.')"><i class="fa fa-eye"></i></button>':''),
+            "1"=>$reg->id_cta,
+            "2"=>$reg->saldo_cta,
+            "3"=>$reg->desc_mon,
+            "4"=>$reg->fecha_creacion_cta,
+            "5"=>$reg->num_mov_cuenta,
+            "6"=>($reg->estado_cta==1)?'<span class="label bg-green">Aceptado</span>':'<span class="label bg-red">Anulado</span>'
+            );
 		}
 		$results=array(
              "sEcho"=>1,//info para datatables
@@ -109,16 +119,16 @@ switch ($_GET["op"]) {
 			require_once "../modelos/Persona.php";
 			$persona = new Persona();
 
-			$rspta = $persona->listarc();
+			// $rspta = $persona->listar();
 
 			while ($reg = $rspta->fetch_object()) {
 				echo '<option value='.$reg->idpersona.'>'.$reg->nombre.'</option>';
 			}
 			break;
 
-			case 'listarArticulos':
-			require_once "../modelos/Articulo.php";
-			$articulo=new Articulo();
+		case 'listarArticulos':
+		require_once "../modelos/Articulo.php";
+		$articulo=new Articulo();
 
 				$rspta=$articulo->listarActivosVenta();
 		$data=Array();

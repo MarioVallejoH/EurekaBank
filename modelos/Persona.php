@@ -1,48 +1,39 @@
 <?php 
 //incluir la conexion de base de datos
 require "../config/Conexion.php";
-class Persona{
+	class Persona{
 
 
-	//implementamos nuestro constructor
-public function __construct(){
+		//implementamos nuestro constructor
+		public function __construct(){
 
-}
+		}
 
-//metodo insertar regiustro
-public function insertar($tipo_persona,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email){
-	$sql="INSERT INTO persona (tipo_persona,nombre,tipo_documento,num_documento,direccion,telefono,email) VALUES ('$tipo_persona','$nombre','$tipo_documento','$num_documento','$direccion','$telefono','$email')";
-	return ejecutarConsulta($sql);
-}
+		// metodo insertar nueva persona 
 
+		public function insertar($nombre_per,$primer_ape_per,$segundo_ape_per,$cedula_per,$dir_resid_per, $ciudad_resid_per){
+			$sql="INSERT INTO persona (nombre_per,primer_ape_per,segundo_ape_per,cedula_per,dir_resid_per,ciudad_resid_per) 
+			VALUES ('$nombre_per','$primer_ape_per','$segundo_ape_per','$cedula_per','$dir_resid_per','$ciudad_resid_per')";
+			// echo $sql;
+			return ejecutarConsulta_retornarID($sql);
+		}
 
+		// funcion para editar persona
 
-public function editar($idpersona,$tipo_persona,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email){
-	$sql="UPDATE persona SET tipo_persona='$tipo_persona', nombre='$nombre',tipo_documento='$tipo_documento',num_documento='$num_documento',direccion='$direccion',telefono='$telefono',email='$email' 
-	WHERE idpersona='$idpersona'";
-	return ejecutarConsulta($sql);
-}
-//funcion para eliminar datos
-public function eliminar($idpersona){
-	$sql="DELETE FROM persona WHERE idpersona='$idpersona'";
-	return ejecutarConsulta($sql);
-}
+		public function editar($id_persona,$nombre_per,$primer_ape_per,$segundo_ape_per,$cedula_per,$dir_resid_per, $ciudad_resid_per){
+			$sql="UPDATE persona SET nombre_per='$nombre_per', primer_ape_per='$primer_ape_per',segundo_ape_per='$segundo_ape_per',
+			cedula_per='$cedula_per',dir_resid_per='$dir_resid_per',ciudad_resid_per='$ciudad_resid_per' WHERE id_persona='$id_persona'";
+			return ejecutarConsulta($sql);
+		}
 
-//metodo para mostrar registros
-public function mostrar($idpersona){
-	$sql="SELECT * FROM persona WHERE idpersona='$idpersona'";
-	return ejecutarConsultaSimpleFila($sql);
-}
+		//funcion que verifica que la persona no exista, en caso de hacerlo retorna el id
 
-//listar registros
-public function listarp(){
-	$sql="SELECT * FROM persona WHERE tipo_persona='Proveedor'";
-	return ejecutarConsulta($sql);
-}
-public function listarc(){
-	$sql="SELECT * FROM persona WHERE tipo_persona='Cliente'";
-	return ejecutarConsulta($sql);
-}
-}
+		public function verificar($cedula_per){
+
+			$sql="SELECT id_persona  FROM persona WHERE cedula_per='$cedula_per'";
+			return ejecutarConsulta($sql);
+
+		}
+	}
 
  ?>

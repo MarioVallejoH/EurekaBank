@@ -1,10 +1,10 @@
 <?php 
 session_start();
-require_once "../modelos/empleado.php";
+require_once "../modelos/clientes.php";
 require_once "../modelos/Persona.php";
 require_once "../modelos/usuario.php";
 
-$empleado = new empleado();
+$cliente = new cliente();
 
 $persona  = new persona();
 
@@ -22,11 +22,11 @@ switch ($_GET["op"]) {
 		$ciudad_resid_per= isset($_POST["ciudad"])? limpiarCadena($_POST["ciudad"]):"";
 		$dir_resid_per   = isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
 		$cedula_per      = isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
-		$telefono_emp    = isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
-		$correo_emp      = isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
+		$telefono_cli    = isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
+		$correo_cli      = isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
 		$nombre_usu      = isset($_POST["login"])? limpiarCadena($_POST["login"]):"";
 		$contraseña_usu  = isset($_POST["clave"])? limpiarCadena($_POST["clave"]):"";
-		$id_empleado     = isset($_POST["id_empleado"])? limpiarCadena($_POST["id_empleado"]):"";
+		$id_cliente     = isset($_POST["id_cliente"])? limpiarCadena($_POST["id_cliente"]):"";
 		$id_usuario      = isset($_POST["id_usuario"])? limpiarCadena($_POST["id_usuario"]):"";
 		//Hash SHA256 para la contraseña
 		// verificamos si la cedula ya esta registrada en el sistema
@@ -44,7 +44,7 @@ switch ($_GET["op"]) {
 			// verificamos el exito de la consulta
 			// echo $id_persona;
 			if(!empty($id_persona)){
-				// para que realize la creacion del usuario y empleado
+				// para que realize la creacion del usuario y cliente
 				$respta = 1;
 			}else{
 				// reportando el error en la creacion de la persona
@@ -54,28 +54,29 @@ switch ($_GET["op"]) {
 		}
 		if ($respta==1){
 			$clavehash=hash("SHA256", $contraseña_usu);
-			// verificamos si estamos editando o creando un empleado nuevo
-			if (empty($id_empleado)) {
+			// verificamos si estamos editando o creando un cliente nuevo
+			if (empty($id_cliente)) {
 				// creacion de un nuevo usuario
-				$id_usuario = $usuario->insertar($nombre_usu,$clavehash,2);
+				
+				$id_usuario = $usuario->insertar($nombre_usu,$clavehash,3);
 				// verificamos que el usuario se halla creado
 				if(!empty($id_usuario)){
-					// creamos el empleado
+					// creamos el cliente
 					//sacamos el id de la sucursal almacenado en las variables de sesion
 
-					$rspta=$empleado->insertar($correo_emp,$telefono_emp,$id_persona,$id_usuario );
-					echo $rspta ? "Datos registrados correctamente" : "No se pudo registrar todos los datos del empleado";
+					$rspta=$cliente->insertar($correo_cli,$telefono_cli,$id_persona,$id_usuario );
+					echo $rspta ? "Datos registrados correctamente" : "No se pudo registrar todos los datos del cliente";
 				}else{
 					echo FALSE;
 				}
 				
 			}else{
-				// echo $id_usuario;
+				echo $id_usuario;
 				$clavehash=hash("SHA256", $contraseña_usu);
 				$respta = $usuario->editar($id_usuario,$nombre_usu,$clavehash);
 				
 				if($respta==1){
-					$rspta=$empleado->editar($id_empleado,$correo_emp,$telefono_emp);
+					$rspta=$cliente->editar($id_cliente,$correo_cli,$telefono_cli);
 					echo $rspta ? "Datos actualizados correctamente" : "No se pudo actualizar los datos";
 				}
 				
@@ -86,42 +87,25 @@ switch ($_GET["op"]) {
 
 	break;
 	
-
-	case 'desactivar':
-		$id_empleado=isset($_POST["id_empleado"])? limpiarCadena($_POST["id_empleado"]):"";
-		$id_usuario=isset($_POST["id_usuario"])? limpiarCadena($_POST["id_usuario"]):"";
-		$rspta=$empleado->desactivar($id_empleado,$id_usuario);
-		echo $rspta ? "Datos desactivados correctamente" : "No se pudo desactivar los datos";
-	break;
-
-	case 'activar':
-		$id_empleado=isset($_POST["id_empleado"])? limpiarCadena($_POST["id_empleado"]):"";
-		$id_usuario=isset($_POST["id_usuario"])? limpiarCadena($_POST["id_usuario"]):"";
-		$rspta=$empleado->activar($id_empleado,$id_usuario);
-		echo $rspta ? "Datos activados correctamente" : "No se pudo activar los datos";
-	break;
 	
 	case 'mostrar':
-		$id_empleado=isset($_POST["id_empleado"])? limpiarCadena($_POST["id_empleado"]):"";	
-		$rspta=$empleado->mostrar($id_empleado);
+		$id_cliente=isset($_POST["id_cliente"])? limpiarCadena($_POST["id_cliente"]):"";
+		$rspta=$cliente->mostrar($id_cliente);
 		// echo $rspta;
 		echo json_encode($rspta);
 	break;
 
 	case 'listar':
-		$rspta=$empleado->listar();
+		$rspta=$cliente->listar();
 		$data=Array();
 
 	while ($reg=$rspta->fetch_object()) {
 		$data[]=array(
-			"0"=>(is_null($reg->fecha_baja_emp) OR $reg->estado==1)?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_empleado.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-danger btn-xs" onclick="desactivar('.$reg->id_empleado.','.$reg->id_usuario.')"><i class="fa fa-close"></i></button>':'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_empleado.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-primary btn-xs" onclick="activar('.$reg->id_empleado.','.$reg->id_usuario.')"><i class="fa fa-check"></i></button>',
+			"0"=>'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_cliente.')"><i class="fa fa-pencil"></i></button>',
 			"1"=>$reg->primer_ape_per." ".$reg->segundo_ape_per,
 			"2"=>$reg->nombre_per,
 			"3"=>$reg->cedula_per,
-			"4"=>$reg->ciudad_resid_per,
-			"5"=>$reg->fecha_creacion_emp,
-			"6"=>$reg->nombre_sucur,
-			"7"=>(is_null($reg->fecha_baja_emp) AND $reg->estado==1)?'<span class="label bg-green">Activado</span>':'<span class="label bg-red">Desactivado</span>'
+			"4"=>$reg->ciudad_resid_per
 		);
 	}
 

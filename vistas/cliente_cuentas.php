@@ -9,7 +9,7 @@ if (!isset($_SESSION['nombre'])) {
 
 require 'header.php';
 
-if ($_SESSION['ventas']==1) {
+if ($_SESSION['rol']==3) {
 
  ?>
     <div class="content-wrapper">
@@ -21,7 +21,7 @@ if ($_SESSION['ventas']==1) {
         <div class="col-md-12">
       <div class="box">
 <div class="box-header with-border">
-  <h1 class="box-title">Ventas <button class="btn btn-success" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i>Agregar</button></h1>
+  <h1 class="box-title">Cuentas </h1>
   <div class="box-tools pull-right">
     
   </div>
@@ -32,24 +32,22 @@ if ($_SESSION['ventas']==1) {
   <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover">
     <thead>
       <th>Opciones</th>
-      <th>Fecha</th>
-      <th>Cliente</th>
-      <th>Usuario</th>
-      <th>Documento</th>
       <th>Número</th>
-      <th>Total Venta</th>
+      <th>Saldo</th>
+      <th>Moneda</th>
+      <th>Fecha de creación</th>
+      <th>Numero de movimientos</th>
       <th>Estado</th>
     </thead>
     <tbody>
     </tbody>
     <tfoot>
-      <th>Opciones</th>
-      <th>Fecha</th>
-      <th>Cliente</th>
-      <th>Usuario</th>
-      <th>Documento</th>
+    <th>Opciones</th>
       <th>Número</th>
-      <th>Total Venta</th>
+      <th>Saldo</th>
+      <th>Moneda</th>
+      <th>Fecha de creación</th>
+      <th>Numero de movimientos</th>
       <th>Estado</th>
     </tfoot>   
   </table>
@@ -178,7 +176,7 @@ if ($_SESSION['ventas']==1) {
 
 require 'footer.php';
  ?>
- <script src="scripts/venta.js"></script>
+ <script src="scripts/cuenta.js"></script>
  <?php 
 }
 

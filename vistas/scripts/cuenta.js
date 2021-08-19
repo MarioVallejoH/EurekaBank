@@ -5,15 +5,15 @@ function init(){
    mostrarform(false);
    listar();
 
-   $("#formulario").on("submit",function(e){
-   	guardaryeditar(e);
-   });
+//    $("#formulario").on("submit",function(e){
+//    	guardaryeditar(e);
+//    });
 
-   //cargamos los items al select cliente
-   $.post("../ajax/venta.php?op=selectCliente", function(r){
-   	$("#idcliente").html(r);
-   	$('#idcliente').selectpicker('refresh');
-   });
+//    //cargamos los items al select cliente
+//    $.post("../ajax/venta.php?op=selectCliente", function(r){
+//    	$("#idcliente").html(r);
+//    	$('#idcliente').selectpicker('refresh');
+//    });
 
 }
 
@@ -74,6 +74,7 @@ function cancelarform(){
 
 //funcion listar
 function listar(){
+	// console.log('holis');
 	tabla=$('#tbllistado').dataTable({
 		"aProcessing": true,//activamos el procedimiento del datatable
 		"aServerSide": true,//paginacion y filrado realizados por el server
@@ -86,7 +87,7 @@ function listar(){
 		],
 		"ajax":
 		{
-			url:'../ajax/venta.php?op=listar',
+			url:'../ajax/cuenta.php?op=listar',
 			type: "get",
 			dataType : "json",
 			error:function(e){
@@ -99,28 +100,28 @@ function listar(){
 	}).DataTable();
 }
 
-function listarArticulos(){
-	tabla=$('#tblarticulos').dataTable({
-		"aProcessing": true,//activamos el procedimiento del datatable
-		"aServerSide": true,//paginacion y filrado realizados por el server
-		dom: 'Bfrtip',//definimos los elementos del control de la tabla
-		buttons: [
+// function listarArticulos(){
+// 	tabla=$('#tblarticulos').dataTable({
+// 		"aProcessing": true,//activamos el procedimiento del datatable
+// 		"aServerSide": true,//paginacion y filrado realizados por el server
+// 		dom: 'Bfrtip',//definimos los elementos del control de la tabla
+// 		buttons: [
 
-		],
-		"ajax":
-		{
-			url:'../ajax/venta.php?op=listarArticulos',
-			type: "get",
-			dataType : "json",
-			error:function(e){
-				console.log(e.responseText);
-			}
-		},
-		"bDestroy":true,
-		"iDisplayLength":5,//paginacion
-		"order":[[0,"desc"]]//ordenar (columna, orden)
-	}).DataTable();
-}
+// 		],
+// 		"ajax":
+// 		{
+// 			url:'../ajax/venta.php?op=listarArticulos',
+// 			type: "get",
+// 			dataType : "json",
+// 			error:function(e){
+// 				console.log(e.responseText);
+// 			}
+// 		},
+// 		"bDestroy":true,
+// 		"iDisplayLength":5,//paginacion
+// 		"order":[[0,"desc"]]//ordenar (columna, orden)
+// 	}).DataTable();
+// }
 //funcion para guardaryeditar
 function guardaryeditar(e){
      e.preventDefault();//no se activara la accion predeterminada 
@@ -128,14 +129,14 @@ function guardaryeditar(e){
      var formData=new FormData($("#formulario")[0]);
 
      $.ajax({
-     	url: "../ajax/venta.php?op=guardaryeditar",
+     	url: "../ajax/cuenta.php?op=guardaryeditar",
      	type: "POST",
      	data: formData,
      	contentType: false,
      	processData: false,
 
      	success: function(datos){
-     		bootbox.alert(datos);
+     		// bootbox.alert(datos);
      		mostrarform(false);
      		listar();
      	}
