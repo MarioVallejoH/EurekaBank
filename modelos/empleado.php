@@ -1,7 +1,7 @@
 <?php 
 //incluir la conexion de base de datos
 require "../config/Conexion.php";
-class Usuario{
+class Empleado{
 
 
 	//implementamos nuestro constructor
@@ -62,17 +62,17 @@ public function activar($id_empleado,$id_usuario){
 
 //metodo para mostrar registros
 public function mostrar($id_empleado){
-	$sql="SELECT p.nombre,p.primer_apellido,p.segundo_apellido,p.num_documento,p.ciudad,e.fecha_creacion_emp,e.fecha_baja_emp,s.nombre_sucur,
-	e.id_empleado,e.telefono_emp, e.correo_emp,u.nombre_usu,p.direccion FROM persona p INNER JOIN empleados e ON e.id_persona=p.id_persona 
-	INNER JOIN sucursales s ON s.id_sucur=e.id_sucur INNER JOIN usuarios u ON u.id_usuario=e.id_usuario WHERE e.id_empleado='$id_empleado'";
+	$sql="SELECT p.nombre_per,p.primer_ape_per,p.segundo_ape_per ,p.cedula_per ,p.ciudad_resid_per,e.fecha_creacion_emp,e.fecha_baja_emp,s.nombre_sucur,
+	e.id_empleado,e.telefono_emp, e.correo_emp,u.nombre_usu,p.dir_resid_per FROM persona p INNER JOIN empleados e ON e.id_persona=p.id_persona 
+	INNER JOIN sucursales s ON s.id_sucursal=e.id_sucursal INNER JOIN usuarios u ON u.id_usuario=e.id_usuario WHERE e.id_empleado='$id_empleado'";
 	// return $sql;
 	return ejecutarConsultaSimpleFila($sql);
 }
 
 //listar registros
 public function listar(){
-	$sql="SELECT p.nombre,p.primer_apellido,p.segundo_apellido,p.num_documento,p.ciudad,e.fecha_creacion_emp,e.fecha_baja_emp,s.nombre_sucur,
-	e.id_empleado,e.id_usuario FROM persona p INNER JOIN empleados e ON e.id_persona=p.id_persona INNER JOIN sucursales s ON s.id_sucur=e.id_sucur";
+	$sql="SELECT p.nombre_per,p.primer_ape_per,p.segundo_ape_per,p.cedula_per,p.ciudad_resid_per,e.fecha_creacion_emp,e.fecha_baja_emp,s.nombre_sucur,
+	e.id_empleado,e.id_usuario FROM persona p INNER JOIN empleados e ON e.id_persona=p.id_persona INNER JOIN sucursales s ON s.id_sucursal=e.id_sucursal";
 	return ejecutarConsulta($sql);
 }
 

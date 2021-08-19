@@ -68,7 +68,7 @@ if ($_SESSION['rol']==1) {
     </div>
     <div class="form-group col-lg-6 col-md-6 col-xs-12">
       <label for="">Ciudad(*): </label>
-      <input class="form-control" type="text" name="ciudad" id="ciudad"  maxlength="30">
+      <input class="form-control" type="text" name="ciudad" id="ciudad"  maxlength="56">
     </div>
     <div class="form-group col-lg-6 col-md-6 col-xs-12">
       <label for="">Dirección(*): </label>

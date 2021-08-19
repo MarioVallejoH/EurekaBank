@@ -15,17 +15,20 @@ function init(){
 
 //funcion limpiar
 function limpiar(){
+	
+	$("#id_usuario").val("");
+	$("#id_empleado").val("");
 	$("#nombre").val("");
-    $("#num_documento").val("");
+	$("#primer_apellido").val("");
+	$("#segundo_apellido").val("");
+	$("#num_documento").val("");
+	$("#ciudad").val("");
 	$("#direccion").val("");
 	$("#telefono").val("");
 	$("#email").val("");
-	$("#cargo").val("");
 	$("#login").val("");
 	$("#clave").val("");
-	$("#imagenmuestra").attr("src","");
-	$("#imagenactual").val("");
-	$("#idusuario").val("");
+	$("#id_empleado").val("");
 }
 
 //funcion mostrar formulario
@@ -63,7 +66,7 @@ function listar(){
 		],
 		"ajax":
 		{
-			url:'../ajax/usuario.php?op=listar',
+			url:'../ajax/empleado.php?op=listar',
 			type: "get",
 			dataType : "json",
 			error:function(e){
@@ -82,7 +85,7 @@ function guardaryeditar(e){
      var formData=new FormData($("#formulario")[0]);
 
      $.ajax({
-     	url: "../ajax/usuario.php?op=guardaryeditar",
+     	url: "../ajax/empleado.php?op=guardaryeditar",
      	type: "POST",
      	data: formData,
      	contentType: false,
@@ -99,18 +102,21 @@ function guardaryeditar(e){
 }
 
 function mostrar(id_empleado){
-	$.post("../ajax/usuario.php?op=mostrar",{id_empleado : id_empleado},
+	// llamamos una funcion de ajax y enviamos parametros por post
+	$.post("../ajax/empleado.php?op=mostrar",{id_empleado : id_empleado},
 		function(data,status)
 		{
 			data=JSON.parse(data);
+			// hacemos que se muestre el formulario
 			mostrarform(true);
-			console.log(data.nombre);
-			$("#nombre").val(data.nombre);
-			$("#primer_apellido").val(data.primer_apellido);
-			$("#segundo_apellido").val(data.segundo_apellido);
-            $("#num_documento").val(data.num_documento);
-            $("#ciudad").val(data.ciudad);
-            $("#direccion").val(data.direccion);
+			// console.log(data.nombre);
+			// precargamos datos pertenecientes al empleado en los campos de texto
+			$("#nombre").val(data.nombre_per);
+			$("#primer_apellido").val(data.primer_ape_per);
+			$("#segundo_apellido").val(data.segundo_ape_per);
+            $("#num_documento").val(data.cedula_per);
+            $("#ciudad").val(data.ciudad_resid_per);
+            $("#direccion").val(data.dir_resid_per);
             $("#telefono").val(data.telefono_emp);
             $("#email").val(data.correo_emp);
             $("#login").val(data.nombre_usu);
@@ -122,29 +128,26 @@ function mostrar(id_empleado){
 
 
 //funcion para desactivar
+
 function desactivar(id_empleado, id_usuario){
 	// console.log(id_usuario);
-	// bootbox.confirm("¿Esta seguro de desactivar este empleado?", function(result){
-		// if (result) {
-	$.post("../ajax/usuario.php?op=desactivar", {id_empleado : id_empleado,id_usuario : id_usuario}, function(e){
+	
+	// llamamos una funcion de ajax y enviamos parametros por post
+	$.post("../ajax/empleado.php?op=desactivar", {id_empleado : id_empleado,id_usuario : id_usuario}, function(e){
 		// bootbox.alert(e);
 		console.log(e);
 		tabla.ajax.reload();
-		// 	});
-		// }
 	})
 }
 
 function activar(id_empleado,id_usuario){
-	// bootbox.confirm("¿Esta seguro de activar este empleado?" , function(result){
-	// 	if (result) {
-			$.post("../ajax/usuario.php?op=activar", {id_empleado : id_empleado,id_usuario : id_usuario}, function(e){
-				// bootbox.alert(e);
-				console.log(e);
-				tabla.ajax.reload();
-			});
-	// 	}
-	// })
+	// llamamos una funcion de ajax y enviamos parametros por post
+	$.post("../ajax/empleado.php?op=activar", {id_empleado : id_empleado,id_usuario : id_usuario}, function(e){
+		// bootbox.alert(e);
+		console.log(e);
+		tabla.ajax.reload();
+	});
+	
 }
 
 

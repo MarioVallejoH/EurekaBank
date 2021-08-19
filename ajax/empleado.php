@@ -1,25 +1,29 @@
 <?php 
 session_start();
-require_once "../modelos/usuario.php";
+require_once "../modelos/empleado.php";
 
-$empleado=new usuario();
+$empleado=new empleado();
 
 
-// $nombre=isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
-// $tipo_documento=isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
-// $num_documento=isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
-// $direccion=isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
-// $telefono=isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
-// $email=isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
-// $cargo=isset($_POST["cargo"])? limpiarCadena($_POST["cargo"]):"";
-// $login=isset($_POST["login"])? limpiarCadena($_POST["login"]):"";
-// $clave=isset($_POST["clave"])? limpiarCadena($_POST["clave"]):"";
-// $imagen=isset($_POST["imagen"])? limpiarCadena($_POST["imagen"]):"";
+
 
 switch ($_GET["op"]) {
 	case 'guardaryeditar':
-
+	
+	// $nombre_per=isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
+	// $cedula_per=isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
+	// $primer_ape_per=isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]):"";
+	// $telefono=isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
+	// $email=isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
+	// $login=isset($_POST["login"])? limpiarCadena($_POST["login"]):"";
+	// $clave=isset($_POST["clave"])? limpiarCadena($_POST["clave"]):"";
+	// $id=isset($_POST["id_empleado"])? limpiarCadena($_POST["id_empleado"]):"";
+	// $id_usuario=isset($_POST["id_usuario"])? limpiarCadena($_POST["id_usuario"]):"";
 	//Hash SHA256 para la contraseña
+	
+
+
+
 	$clavehash=hash("SHA256", $clave);
 	if (empty($id_empleado)) {
 		$rspta=$empleado->insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clavehash,$imagen,$_POST['permiso']);
@@ -59,10 +63,10 @@ switch ($_GET["op"]) {
 	while ($reg=$rspta->fetch_object()) {
 		$data[]=array(
 			"0"=>(is_null($reg->fecha_baja_emp))?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_empleado.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-danger btn-xs" onclick="desactivar('.$reg->id_empleado.','.$reg->id_usuario.')"><i class="fa fa-close"></i></button>':'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_empleado.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-primary btn-xs" onclick="activar('.$reg->id_empleado.','.$reg->id_usuario.')"><i class="fa fa-check"></i></button>',
-			"1"=>$reg->primer_apellido." ".$reg->segundo_apellido,
-			"2"=>$reg->nombre,
-			"3"=>$reg->num_documento,
-			"4"=>$reg->ciudad,
+			"1"=>$reg->primer_ape_per." ".$reg->segundo_ape_per,
+			"2"=>$reg->nombre_per,
+			"3"=>$reg->cedula_per,
+			"4"=>$reg->ciudad_resid_per,
 			"5"=>$reg->fecha_creacion_emp,
 			"6"=>$reg->nombre_sucur,
 			"7"=>(is_null($reg->fecha_baja_emp))?'<span class="label bg-green">Activado</span>':'<span class="label bg-red">Desactivado</span>'
@@ -76,68 +80,6 @@ switch ($_GET["op"]) {
              "aaData"=>$data); 
 	echo json_encode($results);
 	break;
-
-	case 'permisos':
-			//obtenemos toodos los permisos de la tabla permisos
-	require_once "../modelos/Permiso.php";
-	$permiso=new Permiso();
-	$rspta=$permiso->listar();
-//obtener permisos asigandos
-	$id=$_GET['id'];
-	$marcados=$empleado->listarmarcados($id);
-	$valores=array();
-
-//almacenar permisos asigandos
-	while ($per=$marcados->fetch_object()) {
-		array_push($valores, $per->idpermiso);
-	}
-			//mostramos la lista de permisos
-	while ($reg=$rspta->fetch_object()) {
-		$sw=in_array($reg->idpermiso,$valores)?'checked':'';
-		echo '<li><input type="checkbox" '.$sw.' name="permiso[]" value="'.$reg->idpermiso.'">'.$reg->nombre.'</li>';
-	}
-	break;
-
-	case 'verificar':
-	//validar si el empleado tiene acceso al sistema
-	$logina=$_POST['logina'];
-	$clavea=$_POST['clavea'];
-	//Hash SHA256 en la contraseña
-	$clavehash=hash("SHA256", $clavea);
-
-	// echo $clavehash;
-	
-	// se hace uso de el modelo de empleado para verificarlo
-	$rspta=$empleado->verificar($logina, $clavehash);
-	
-	// verificamos si la consulta fue exitosa
-	$fetch=$rspta->fetch_object();
-	if (isset($fetch)) {
-	// 	# Declaramos la variables de sesion
-		$_SESSION['id_usuario']=$fetch->id_usuario;
-		$_SESSION['nombre']=$fetch->nombre_usu;
-		$_SESSION['rol']=$fetch->rol;
-
-	}
-
-	// retornamos algo para reportar el login exitoso
-	echo isset($fetch);
-
-
-
-	break;
-	case 'salir':
-	   //limpiamos la variables de la secion
-	session_unset();
-
-	  //destruimos la sesion
-	session_destroy();
-		  //redireccionamos al login
-	header("Location: ../index.php");
-	break;
-
-	
-
 
 	
 }
