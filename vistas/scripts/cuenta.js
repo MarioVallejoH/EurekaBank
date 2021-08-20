@@ -89,7 +89,8 @@ function cargar_datos_cuenta(){
 			$("#saldo_cta").val(data.saldo_cta);
 			$("#num_mov_cuenta").val(data.num_mov_cuenta);
 			$("#fecha_hora").val(data.fecha_creacion_cta);
-			$("#impuesto").val(data.impuesto);
+			$("#clave_cta").val(data.clave_cta);
+
 		});
 	// $.post("../ajax/venta.php?op=listarDetalle&id="+id_cta,function(r){
 	// 	$("#detalles").html(r);

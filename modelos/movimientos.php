@@ -25,20 +25,20 @@
 
 				// actualizamos el saldo de la cuenta
 				$sql = "UPDATE cuentas c SET saldo_cta = c.saldo_cta-'$importe_mov',c.num_mov_cuenta=c.num_mov_cuenta+'1' WHERE c.id_cta='$id_cta'";
-
+				// echo $sql;
 				// verificamos el exito de la consulta
 				if(ejecutarConsulta($sql)){
 					// sumamos el saldo quitado a la nueva cuenta
 					$sql = "UPDATE cuentas c SET c.saldo_cta = c.saldo_cta+'$importe_mov',c.num_mov_cuenta=c.num_mov_cuenta+'1'
 					WHERE c.id_cta='$cuenta_ref_mov'";
-
+					// echo $sql;
 					if(ejecutarConsulta($sql)){
 						echo "Transaccion exitosa";
 					}else{
 
 						// devolvemos el saldo quitado
 						$sql = "UPDATE cuentas c SET c.saldo_cta = c.saldo_cta+'$importe_mov',c.num_mov_cuenta=c.num_mov_cuenta-'1' WHERE c.id_cta='$id_cta'";
-
+						// echo $sql;
 
 						if(ejecutarConsulta($sql)){
 
@@ -128,6 +128,49 @@
 		return ejecutarConsulta($sql);
 	}
 
+	public function impuesto($importe_mov,$fecha_creacion_mov,$id_empleado,$id_cta){
+		$sql="INSERT INTO movimientos (importe_mov,cuenta_ref_mov,fecha_creacion_mov,id_empleado,id_cta,id_tipo_mov,
+			estado_mov) VALUES ('$importe_mov',NULL,'$fecha_creacion_mov','$id_empleado','$id_cta',
+			'8','1')";
+		$id_mov = ejecutarConsulta_retornarID($sql);
+
+		
+		// verificamos el exito de el registro
+		if(!empty($id_mov)){
+
+				// el impuesto no cuenta como movimiento, asi que no lo sumamos
+				$sql = "UPDATE cuentas c SET saldo_cta = c.saldo_cta-'$importe_mov' WHERE c.id_cta='$id_cta'";
+				// echo $sql;
+				$resp = ejecutarConsulta($sql);
+				// echo $resp;
+				// verificamos el exito de la consulta
+				if(ejecutarConsulta($sql)){
+					
+					echo "Transaccion exitosa";
+
+				}else{
+
+					$sql = "UPDATE movimientos m SET m.estado_mov='0' WHERE m.id_mov='$id_mov'";
+					$rspta = ejecutarConsulta($sql);
+
+					echo $rspta?'Movimiento cancelado exitosamente':'Exito al cancelar el movimiento';
+				
+				}
+			// actualizamos el saldo de la cuenta
+			
+		}else{
+			// echo $id_mov;
+			
+			echo "Error al registrar el movimiento";
+		}
+		
+	
+
+		// echo $sql;
+		//return ejecutarConsulta($sql);
+		return ejecutarConsulta($sql);
+	}
+
 	public function anular($id_movimiento){
 		$sql="UPDATE Moivimientos SET estado='Anulado' WHERE id_movimientos='$id_movimiento'";
 		return ejecutarConsulta($sql);
@@ -141,6 +184,12 @@
 		FROM movimientos m INNER JOIN tipo_movimiento t ON t.id_tipo_mov=m.id_tipo_mov INNER JOIN empleados e 
 		ON e.id_empleado=m.id_empleado WHERE m.id_cta='$id_cta'";
 		// echo $sql;
+		return ejecutarConsulta($sql);
+	}
+
+	// obtener info de valores de IFT
+	public function info_IFT($id_mon){
+		$sql="SELECT valor FROM costos WHERE id_mon='$id_mon'";
 		return ejecutarConsulta($sql);
 	}
 

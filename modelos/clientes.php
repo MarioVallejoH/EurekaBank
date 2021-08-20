@@ -68,6 +68,8 @@ class Cliente{
 	public function obtener_id($id_usuario){
 
 		$sql="SELECT id_cliente  FROM clientes WHERE id_usuario='$id_usuario'";
+
+		// echo $sql;
 		return ejecutarConsulta($sql);
 
 	}

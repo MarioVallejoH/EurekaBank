@@ -49,6 +49,10 @@ if (!empty($_SESSION['rol'])) {
       <label for="">Numero de movimientos: </label>
       <input class="form-control" type="text" name="num_mov_cuenta" id="num_mov_cuenta" maxlength="7" placeholder="0" readonly >
     </div>
+    <div class="form-group col-lg-4 col-md-4 col-xs-6">
+      <label for="">Clave: </label>
+      <input class="form-control" type="text" name="clave_cta" id="clave_cta" maxlength="7" placeholder="0" readonly >
+    </div>
     
     <div class="form-group col-lg-2 col-md-2 col-xs-6">
       

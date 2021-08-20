@@ -2,6 +2,8 @@
 require_once "../modelos/cuenta.php";
 require_once "../modelos/clientes.php";
 require_once "../modelos/movimientos.php";
+require_once "../modelos/empleado.php";
+				
 
 		
 
@@ -10,6 +12,8 @@ if (strlen(session_id())<1)
 	session_start();
 
 $cuenta = new cuenta();
+
+$empleado = new empleado();
 
 $cliente = new cliente();
 
@@ -22,14 +26,52 @@ $movimientos = new movimientos();
 
 
 switch ($_GET["op"]) {
-	case 'guardaryeditar':
-	if (empty($idventa)) {
-		$rspta=$cuenta->insertar($idcliente,$idusuario,$tipo_comprobante,$serie_comprobante,$num_comprobante,$fecha_hora,$impuesto,$total_venta,$_POST["idarticulo"],$_POST["cantidad"],$_POST["precio_venta"],$_POST["descuento"]); 
-		echo $rspta ? "Datos registrados correctamente" : "No se pudo registrar los datos";
-	}else{
-        
-	}
-		break;
+	case 'crearCuenta':
+		// recibimos el id del cliente enviado por get
+		$id_cliente = $_GET["id_cliente"];
+
+		// cargamos la fecha actual
+		$date = date('Y-m-d h:i:s');
+
+		// sacamos datos del formulario enviado por post
+		$id_tipo_mon	=isset($_POST["id_tipo_mon"])? limpiarCadena($_POST["id_tipo_mon"]):"";
+		$saldo_cta	    =isset($_POST["saldo_cta"])? limpiarCadena($_POST["saldo_cta"]):"";
+		$clave_cta      =isset($_POST["clave_cta"])? limpiarCadena($_POST["clave_cta"]):"";
+
+		// realizamos el movimiento inicial
+
+		
+		// verificamos que el saldo sea '' y lo volvemos cero
+		if($saldo_cta==''){
+			$saldo_cta=0;
+		}
+		
+
+		// buscamos el id del empleado logueado usando el modelo de empleado y de paso el id de la sucursal a la que pertenece
+				
+		$rspta = $empleado->obtener_id($_SESSION['id_usuario']);
+
+		// verificamos el exito en la consulta
+		if($rspta){
+			$reg=$rspta->fetch_object();
+			$id_empleado = $reg->id_empleado;
+			$id_sucursal = $reg->id_sucursal;
+		}else{
+			echo 'Error al obtener id_empleado del usuario empleado';
+		}
+
+		$id_cta=$cuenta->insertar($saldo_cta,$date,$clave_cta,$id_tipo_mon,$id_empleado,$id_cliente,$id_sucursal); 
+		if(!empty($id_cta)){
+			//realizamos el registro del movimiento
+			$rspta = $movimientos->insertar($saldo_cta,'',$date,$id_empleado,$id_cta,'1');
+			echo $rspta;
+		echo $rspta;
+		}else{
+			echo "No se pudo registrar los datos";
+		}
+		
+
+	break;
 	
 
 	case 'anular':
@@ -54,7 +96,7 @@ switch ($_GET["op"]) {
 		$importe_mov	=isset($_POST["importe_mov"])? limpiarCadena($_POST["importe_mov"]):"";
 		$cuenta_ref_mov =isset($_POST["cuenta_ref"])? limpiarCadena($_POST["cuenta_ref"]):"";
 
-		$rspta = $cuenta->saldo($id_cta);
+		$rspta = $cuenta->info($id_cta);
 		$reg=$rspta->fetch_object();
 		if($id_tipo_mov=='6' AND $cuenta_ref_mov==''){
 			echo 'Cuenta de referencia para la transferencia no suministrada';
@@ -66,8 +108,7 @@ switch ($_GET["op"]) {
 				$id_empleado = 9999;
 			}elseif($_SESSION['rol']==2){
 				// buscamos el id del empleado logueado usando el modelo de empleado
-				require_once "../modelos/empleado.php";
-				$empleado = new empleado();
+				
 				$rspta = $empleado->obtener_id($_SESSION['id_usuario']);
 
 				// verificamos el exito en la consulta
@@ -75,7 +116,7 @@ switch ($_GET["op"]) {
 					$reg=$rspta->fetch_object();
 					$id_empleado=$reg->id_empleado;
 				}else{
-					echo 'Error al obtener id del usuario empleado';
+					echo 'Error al obtener id_empleado del usuario empleado';
 				}
 
 			}
@@ -84,6 +125,23 @@ switch ($_GET["op"]) {
 
 			//realizamos el registro del movimiento
 			$rspta = $movimientos->insertar($importe_mov,$cuenta_ref_mov,$date,$id_empleado,$id_cta,$id_tipo_mov);
+
+			// realizamos el cargo de IFT de ser necesario
+
+			$rspta = $cuenta->info($id_cta);
+			$reg=$rspta->fetch_object();
+			if($reg->num_mov_cuenta>15){
+				// obtenemos la info de IFT para el tipo de moneda
+				$rspta     = $movimientos->info_IFT($reg->id_mon);
+				$reg_IFT   = $rspta->fetch_object();
+				
+				// se verifica que halla saldo para el cobro de IFT (lo dejo comentado por que no se si es necesario)
+				// if($reg->valor<$reg->sald_cta){
+					$rspta = $movimientos->impuesto($reg->valor,$fecha_creacion_mov,$id_empleado,$id_cta);
+				// }else{
+				// 	echo "Sin saldo para cobrar el IFT";
+				// }
+			}
 			echo $rspta;
 				
 			// verificamos que exista saldo en caso de que el movimiento sea de salida
@@ -147,6 +205,7 @@ switch ($_GET["op"]) {
 			$rspta = $cliente->obtener_id($_SESSION['id_usuario']);
 			$reg=$rspta->fetch_object();
 			$id_cliente = $reg->id_cliente;
+		
 		}else{
 			// obtener el id del cliente enviado por get
 			$id_cliente = $_GET["id_cliente"];

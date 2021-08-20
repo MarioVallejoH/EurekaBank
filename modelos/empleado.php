@@ -71,7 +71,7 @@ class Empleado{
 	//obtener el id del empleado actualmente logueado
 	public function obtener_id($id_usuario){
 
-		$sql="SELECT id_empleado  FROM empleados WHERE id_usuario='$id_usuario'";
+		$sql="SELECT id_empleado,id_sucursal  FROM empleados WHERE id_usuario='$id_usuario'";
 		// echo $sql;
 		return ejecutarConsulta($sql);
 
