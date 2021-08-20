@@ -11,11 +11,13 @@ $("#frmAcceso").on('submit', function(e)
         {
            if (data!="null")
             {
-                // bootbox.alert("Usuario y/o Password incorrectos");
+                //login exitoso
             
                 console.log(data);
             	$(location).attr("href","empleados.php");
             }else{
+
+                // datos incorrectos
             	bootbox.alert("Usuario y/o Password incorrectos");
             }
         });

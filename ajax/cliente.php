@@ -24,7 +24,6 @@ switch ($_GET["op"]) {
 		$cedula_per      = isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
 		$telefono_cli    = isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
 		$correo_cli      = isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
-		$nombre_usu      = isset($_POST["login"])? limpiarCadena($_POST["login"]):"";
 		$contraseña_usu  = isset($_POST["clave"])? limpiarCadena($_POST["clave"]):"";
 		$id_cliente     = isset($_POST["id_cliente"])? limpiarCadena($_POST["id_cliente"]):"";
 		$id_usuario      = isset($_POST["id_usuario"])? limpiarCadena($_POST["id_usuario"]):"";
@@ -58,7 +57,7 @@ switch ($_GET["op"]) {
 			if (empty($id_cliente)) {
 				// creacion de un nuevo usuario
 				
-				$id_usuario = $usuario->insertar($nombre_usu,$clavehash,3);
+				$id_usuario = $usuario->insertar($cedula_per,$clavehash,3);
 				// verificamos que el usuario se halla creado
 				if(!empty($id_usuario)){
 					// creamos el cliente
@@ -73,7 +72,7 @@ switch ($_GET["op"]) {
 			}else{
 				echo $id_usuario;
 				$clavehash=hash("SHA256", $contraseña_usu);
-				$respta = $usuario->editar($id_usuario,$nombre_usu,$clavehash);
+				$respta = $usuario->editar($id_usuario,$cedula_per,$clavehash);
 				
 				if($respta==1){
 					$rspta=$cliente->editar($id_cliente,$correo_cli,$telefono_cli);
@@ -101,7 +100,7 @@ switch ($_GET["op"]) {
 
 	while ($reg=$rspta->fetch_object()) {
 		$data[]=array(
-			"0"=>'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_cliente.')"><i class="fa fa-pencil"></i></button>',
+			"0"=>'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_cliente.')"><i class="fa fa-pencil"></i></button> <button class="btn btn-warning btn-xs" onclick="cuentas('.$reg->id_cliente.')"><i class="fa fa-table"></i></button>',
 			"1"=>$reg->primer_ape_per." ".$reg->segundo_ape_per,
 			"2"=>$reg->nombre_per,
 			"3"=>$reg->cedula_per,

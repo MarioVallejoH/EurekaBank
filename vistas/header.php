@@ -24,8 +24,6 @@ if (strlen(session_id())<1)
   <link rel="stylesheet" href="../public/css/AdminLTE.min.css">
   <link rel="stylesheet" href="../public/css/_all-skins.min.css">
   <!-- Morris chart --><!-- Daterange picker -->
- <link rel="stylesheet" href="img/apple-touch-ico.png">
- <link rel="stylesheet" href="img/favicon.ico">
 <!-- DATATABLES-->
 <link rel="stylesheet" href="../public/datatables/jquery.dataTables.min.css">
 <link rel="stylesheet" href="../public/datatables/buttons.dataTables.min.css">
@@ -121,7 +119,7 @@ if (strlen(session_id())<1)
           ?>
 
           <?php 
-            if ($_SESSION['rol']==1 OR $_SESSION['rol']==3) {
+            if ($_SESSION['rol']==3) {
             echo '<li><a href="cliente_cuentas.php"><i class="fa  fa-table (alias)"></i> <span>Cuentas - Cliente </span></a>
               </li>';
             }

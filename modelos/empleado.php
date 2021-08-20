@@ -68,13 +68,16 @@ class Empleado{
 		return ejecutarConsulta($sql);
 	}
 
-	//metodo para listar permmisos marcados de un usuario especifico
-	public function listarmarcados($id_empleado){
-		$sql="SELECT * FROM usuario_permiso WHERE id_empleado='$id_empleado'";
+	//obtener el id del empleado actualmente logueado
+	public function obtener_id($id_usuario){
+
+		$sql="SELECT id_empleado  FROM empleados WHERE id_usuario='$id_usuario'";
+		// echo $sql;
 		return ejecutarConsulta($sql);
+
 	}
 
 	
-	}
+}
 
  ?>

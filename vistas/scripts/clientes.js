@@ -13,6 +13,12 @@ function init(){
 
 }
 
+// mostrar informacion de la cuenta
+function cuentas(id_cliente){
+	// enviamos el id de la cuenta para poder listar sus datos
+	$(location).attr("href","cliente_cuentas.php?id_cliente="+id_cliente);
+}
+
 //funcion limpiar
 function limpiar(){
 	
@@ -122,7 +128,7 @@ function mostrar(id_cliente){
             $("#telefono").val(data.telefono_cli);
             $("#email").val(data.correo_cli);
             $("#login").val(data.nombre_usu);
-            $("#clave").val("Digita una nueva contraseña");
+            $("#clave").val("");
             $("#id_cliente").val(data.id_cliente);
 			$("#id_usuario").val(data.id_usuario);
 		});

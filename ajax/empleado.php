@@ -24,7 +24,6 @@ switch ($_GET["op"]) {
 		$cedula_per      = isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
 		$telefono_emp    = isset($_POST["telefono"])? limpiarCadena($_POST["telefono"]):"";
 		$correo_emp      = isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
-		$nombre_usu      = isset($_POST["login"])? limpiarCadena($_POST["login"]):"";
 		$contraseña_usu  = isset($_POST["clave"])? limpiarCadena($_POST["clave"]):"";
 		$id_empleado     = isset($_POST["id_empleado"])? limpiarCadena($_POST["id_empleado"]):"";
 		$id_usuario      = isset($_POST["id_usuario"])? limpiarCadena($_POST["id_usuario"]):"";
@@ -57,7 +56,7 @@ switch ($_GET["op"]) {
 			// verificamos si estamos editando o creando un empleado nuevo
 			if (empty($id_empleado)) {
 				// creacion de un nuevo usuario
-				$id_usuario = $usuario->insertar($nombre_usu,$clavehash,2);
+				$id_usuario = $usuario->insertar($cedula_per,$clavehash,2);
 				// verificamos que el usuario se halla creado
 				if(!empty($id_usuario)){
 					// creamos el empleado
@@ -72,7 +71,7 @@ switch ($_GET["op"]) {
 			}else{
 				// echo $id_usuario;
 				$clavehash=hash("SHA256", $contraseña_usu);
-				$respta = $usuario->editar($id_usuario,$nombre_usu,$clavehash);
+				$respta = $usuario->editar($id_usuario,$cedula_per,$clavehash);
 				
 				if($respta==1){
 					$rspta=$empleado->editar($id_empleado,$correo_emp,$telefono_emp);

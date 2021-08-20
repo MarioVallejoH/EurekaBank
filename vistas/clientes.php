@@ -57,31 +57,27 @@ if ($_SESSION['rol']==1 OR $_SESSION['rol']==2) {
     </div>
     <div class="form-group col-lg-6 col-md-6 col-xs-12">
       <label for="">Numero de Documento(*): </label>
-      <input type="text" class="form-control" name="num_documento" id="num_documento" placeholder="Documento" maxlength="20">
+      <input type="number" class="form-control" name="num_documento" id="num_documento" placeholder="Documento" maxlength="15"required>
     </div>
     <div class="form-group col-lg-6 col-md-6 col-xs-12">
       <label for="">Ciudad(*): </label>
-      <input class="form-control" type="text" name="ciudad" id="ciudad"  maxlength="56">
+      <input class="form-control" type="text" name="ciudad" id="ciudad"  maxlength="20" required>
     </div>
     <div class="form-group col-lg-6 col-md-6 col-xs-12">
       <label for="">Dirección(*): </label>
-      <input class="form-control" type="text" name="direccion" id="direccion"  maxlength="70">
+      <input class="form-control" type="text" name="direccion" id="direccion"  maxlength="70" required>
     </div>
        <div class="form-group col-lg-6 col-md-6 col-xs-12">
       <label for="">Telefono(*): </label>
-      <input class="form-control" type="text" name="telefono" id="telefono" maxlength="20" placeholder="Número de telefono">
+      <input class="form-control" type="number" name="telefono" id="telefono" maxlength="10" placeholder="Número de telefono">
     </div>
     <div class="form-group col-lg-6 col-md-6 col-xs-12">
       <label for="">Email(*): </label>
       <input class="form-control" type="email" name="email" id="email" maxlength="50" placeholder="email">
     </div>
     <div class="form-group col-lg-6 col-md-6 col-xs-12">
-      <label for="">Login(*):</label>
-      <input class="form-control" type="text" name="login" id="login" maxlength="30" placeholder="nombre de usuario" required>
-    </div>
-    <div class="form-group col-lg-6 col-md-6 col-xs-12">
       <label for="">Contraseña(*):</label>
-      <input class="form-control" type="text" name="clave" id="clave" maxlength="100" placeholder="Clave">
+      <input class="form-control" type="text" name="clave" id="clave" maxlength="20" placeholder="Clave" required>
     </div>
     
     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">

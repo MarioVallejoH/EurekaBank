@@ -122,7 +122,7 @@ function mostrar(id_empleado){
             $("#telefono").val(data.telefono_emp);
             $("#email").val(data.correo_emp);
             $("#login").val(data.nombre_usu);
-            $("#clave").val("Digita una nueva contraseña");
+            $("#clave").val("");
             $("#id_empleado").val(data.id_empleado);
 			$("#id_usuario").val(data.id_usuario);
 		});
