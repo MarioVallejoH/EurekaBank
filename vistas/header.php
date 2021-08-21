@@ -32,13 +32,13 @@ if (strlen(session_id())<1)
 
 </head>
 <body class="hold-transition skin-white sidebar-mini">
-<div class="wrapper">
+<div>
 
   <header class="main-header">
     <!-- Logo -->
     
     <!-- href basado en el rol de el usuario -->
-    <a href= <?php 
+    <a class="logo" href= <?php 
             if ($_SESSION['rol']==1) {
               echo 'empleados.php';
             }elseif($_SESSION['rol']==2){
@@ -47,7 +47,7 @@ if (strlen(session_id())<1)
               echo 'cliente_cuentas.php';
             }
           ?> 
-        class="logo">
+        >
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>E</b>B</span>
       
@@ -67,7 +67,7 @@ if (strlen(session_id())<1)
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="../files/images/Img.png" class="user-image" alt="User Image">
-              <span class="hidden-xs"><?php echo $_SESSION['nombre']; ?></span>
+              <span><?php echo $_SESSION['nombre']; ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -77,9 +77,7 @@ if (strlen(session_id())<1)
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
-                <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Perfil</a>
-                </div>
+                
                 <div class="pull-right">
                   <a href="../ajax/login.php?op=salir" class="btn btn-default btn-flat">Salir</a>
                 </div>
@@ -112,7 +110,7 @@ if (strlen(session_id())<1)
             }
           ?>
           <?php 
-            if ($_SESSION['rol']==1 OR $_SESSION['rol']==2) {
+            if ($_SESSION['rol']==2) {
             echo '<li><a href="clientes.php"><i class="fa  fa-user (alias)"></i> <span>Clientes - Datos </span></a>
               </li>';
             }

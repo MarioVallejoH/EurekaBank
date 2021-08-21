@@ -2,7 +2,7 @@
 session_start();
 require_once "../modelos/login.php";
 
-$empleado=new login();
+$login =new login();
 
 
 switch ($_GET["op"]) {
@@ -16,8 +16,8 @@ switch ($_GET["op"]) {
 
         // echo $clavehash;
         
-        // se hace uso de el modelo de empleado para verificarlo
-        $rspta=$empleado->verificar($logina, $clavehash);
+        // se hace uso de el modelo de login para verificarlo
+        $rspta=$login->verificar($logina, $clavehash);
         
         // verificamos si la consulta fue exitosa
         $fetch=$rspta->fetch_object();

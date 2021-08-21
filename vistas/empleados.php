@@ -10,18 +10,18 @@ require 'header.php';
 if ($_SESSION['rol']==1) {
  ?>
     <div class="content-wrapper">
-    <!-- Main content -->
+    <!-- Main content padding-->
     <section class="content">
 
       <!-- Default box -->
       <div class="row">
         <div class="col-md-12">
+
+        <!-- cargar fondo blanco al contenido -->
       <div class="box">
 <div class="box-header with-border">
   <h1 class="box-title">Empleados <button class="btn btn-primary" onclick="mostrarform(true)" id="btnagregar"><i class="fa fa-plus-circle"></i> Agregar</button></h1>
-  <div class="box-tools pull-right">
-    
-  </div>
+  
 </div>
 <!--box-header-->
 <!--centro-->
@@ -38,18 +38,7 @@ if ($_SESSION['rol']==1) {
       <th>Estado</th>
     </thead>
     <tbody>
-    </tbody>
-    <tfoot>
-      <th>Opciones</th>
-      <th>Apellidos</th>
-      <th>Nombre</th>
-      
-      <th>Numero Documento</th>
-      <th>Ciudad</th>
-      <th>Fecha de creación</th>
-      <th>Sucursal</th>
-      <th>Estado</th>
-    </tfoot>   
+    </tbody> 
   </table>
 </div>
 <div class="panel-body" id="formularioregistros">
@@ -62,9 +51,9 @@ if ($_SESSION['rol']==1) {
       <input class="form-control" type="text" name="primer_apellido" id="primer_apellido" maxlength="30" placeholder="Primer apellido" required>
       <input class="form-control" type="text" name="segundo_apellido" id="segundo_apellido" maxlength="30" placeholder="Segundo apellido" required>
     </div>
-    <div class="form-group col-lg-6 col-md-6 col-xs-12">
+    <div class="form-group col-lg-6 col-md-8 col-xs-12">
       <label for="">Numero de Documento(*): </label>
-      <input type="number" class="form-control" name="num_documento" id="num_documento" placeholder="Documento" maxlength="15"required>
+      <input type="text" class="form-control" name="num_documento" id="num_documento" placeholder="Documento" maxlength="15"required>
     </div>
     <div class="form-group col-lg-6 col-md-6 col-xs-12">
       <label for="">Ciudad(*): </label>
@@ -84,7 +73,7 @@ if ($_SESSION['rol']==1) {
     </div>
     <div class="form-group col-lg-6 col-md-6 col-xs-12">
       <label for="">Contraseña(*):</label>
-      <input class="form-control" type="text" name="clave" id="clave" maxlength="20" placeholder="Clave" required>
+      <input class="form-control" type="text" name="clave" id="clave" maxlength="20" placeholder="Clave no mas de 20 caracteres" required>
     </div>
     
     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -98,7 +87,6 @@ if ($_SESSION['rol']==1) {
       </div>
       </div>
       <!-- /.box -->
-
     </section>
     <!-- /.content -->
   </div>

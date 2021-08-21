@@ -62,10 +62,27 @@ switch ($_GET["op"]) {
 
 		$id_cta=$cuenta->insertar($saldo_cta,$date,$clave_cta,$id_tipo_mon,$id_empleado,$id_cliente,$id_sucursal); 
 		if(!empty($id_cta)){
+			
 			//realizamos el registro del movimiento
 			$rspta = $movimientos->insertar($saldo_cta,'',$date,$id_empleado,$id_cta,'1');
-			echo $rspta;
-		echo $rspta;
+			if($rspta){
+				// actualizamos el numero de cuentas de la sucursal
+				require_once "../modelos/sucursales.php";
+				$sucursal = new sucursal();
+				$rspta = $sucursal->incrementar_cuentas($id_sucursal);
+				
+				echo $rspta ? 'Consulta exitosa':'Error en la consulta';
+				
+			}else{
+				echo "Error al registrar el movimiento inicial de la cuenta";
+			}
+
+			
+
+			
+
+
+			echo $rspta? 'Exito!' :$rspta;
 		}else{
 			echo "No se pudo registrar los datos";
 		}
@@ -142,7 +159,7 @@ switch ($_GET["op"]) {
 				// 	echo "Sin saldo para cobrar el IFT";
 				// }
 			}
-			echo $rspta;
+			echo $rspta ? 'Consulta exitosa': $rspta;;
 				
 			// verificamos que exista saldo en caso de que el movimiento sea de salida
 		}else{

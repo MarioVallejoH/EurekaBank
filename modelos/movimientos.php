@@ -32,8 +32,9 @@
 					$sql = "UPDATE cuentas c SET c.saldo_cta = c.saldo_cta+'$importe_mov',c.num_mov_cuenta=c.num_mov_cuenta+'1'
 					WHERE c.id_cta='$cuenta_ref_mov'";
 					// echo $sql;
-					if(ejecutarConsulta($sql)){
-						echo "Transaccion exitosa";
+					$resp = ejecutarConsulta($sql);
+					if($resp){
+						echo $resp;
 					}else{
 
 						// devolvemos el saldo quitado
@@ -84,7 +85,7 @@
 					// echo $resp;
 					if($resp){
 						
-						echo "Transaccion exitosa";
+						echo $resp;
 
 					}else{
 
@@ -101,9 +102,9 @@
 					$resp = ejecutarConsulta($sql);
 					// echo $resp;
 					// verificamos el exito de la consulta
-					if(ejecutarConsulta($sql)){
+					if($resp){
 						
-						echo "Transaccion exitosa";
+						echo $resp;
 
 					}else{
 
@@ -168,11 +169,6 @@
 
 		// echo $sql;
 		//return ejecutarConsulta($sql);
-		return ejecutarConsulta($sql);
-	}
-
-	public function anular($id_movimiento){
-		$sql="UPDATE Moivimientos SET estado='Anulado' WHERE id_movimientos='$id_movimiento'";
 		return ejecutarConsulta($sql);
 	}
 

@@ -64,7 +64,7 @@ class Empleado{
 	public function listar(){
 		$sql="SELECT p.nombre_per,p.primer_ape_per,p.segundo_ape_per,p.cedula_per,p.ciudad_resid_per,e.fecha_creacion_emp,e.fecha_baja_emp,s.nombre_sucur,
 		e.id_empleado,e.id_usuario,u.estado FROM persona p INNER JOIN empleados e ON e.id_persona=p.id_persona INNER JOIN sucursales s ON s.id_sucursal=e.id_sucursal
-		INNER JOIN usuarios u ON u.id_usuario=e.id_usuario";
+		INNER JOIN usuarios u ON u.id_usuario=e.id_usuario WHERE e.id_empleado!='9999'";
 		return ejecutarConsulta($sql);
 	}
 
