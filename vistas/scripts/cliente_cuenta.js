@@ -1,20 +1,25 @@
 var tabla;
 
-//funcion que se ejecuta al inicio
+//funcion que se ejecuta al inicio (cargar el script)
 function init(){
 
+	// listener al evento submit del formulario de para luego realizar una accion
 	$("#formularioregistros").on("submit",function(e){
+		// funcion a ejecutar
 		guardaryeditar(e);
-		$('#myModal').modal('toggle'); //or  $('#IDModal').modal('hide');
 		return false;
 	});
+	// ocultamos el formulario
 	mostrarform(false);
+	// listamos las cuentas de un cliente
 	listar();
 
 	//cargamos los items al select tipo_mon
 	$.post("../ajax/cuenta.php?op=selectTipoMon", function(r){
 	// console.log(r);
+	// inyectamos html luego del select con id_tipo_mov
 	$("#id_tipo_mon").html(r);
+	// recargamos el select
 	$('#id_tipo_mon').selectpicker('refresh');
 });
 
@@ -42,7 +47,7 @@ function cancelarform(){
 	mostrarform(false);
 }
 
-// para limpiar los datos en el formulario de creacion de cuentas
+// para resetear los datos en el formulario de creacion de cuentas
 function limpiar(){
 
 
@@ -121,28 +126,32 @@ function mostrar(id_cta){
 }
 
 
-//funcion para desactivar
-function anular(id_cta){
-	// bootbox.confirm("¿Esta seguro de desactivar este dato?", function(result){
-	// 	if (result) {
-	// 		$.post("../ajax/cuenta.php?op=anular", {id_cta : id_cta}, function(e){
-	// 			bootbox.alert(e);
-	// 			tabla.ajax.reload();
-	// 		});
-	// 	}
-	// })
+//funcion para desactivar una cuenta
+function desactivar(id_cta){
+	// bootbox alert para esperar una confirmacion de el usuario
+	bootbox.confirm("¿Esta seguro de desactivar esta cuenta?", function(result){
+		if (result) {
+			$.post("../ajax/cuenta.php?op=desactivar", {id_cta : id_cta}, function(e){
+				bootbox.alert(e);
+				//recargamos la tabla para que la vista carge los cambios hechos
+				tabla.ajax.reload();
+			});
+		}
+	})
 }
 
 //funcion para activar
 function activar(id_cta){
-	// bootbox.confirm("¿Esta seguro de desactivar este dato?", function(result){
-	// 	if (result) {
-	// 		$.post("../ajax/cuenta.php?op=anular", {id_cta : id_cta}, function(e){
-	// 			bootbox.alert(e);
-	// 			tabla.ajax.reload();
-	// 		});
-	// 	}
-	// })
+	// bootbox alert para esperar una confirmacion de el usuario
+	bootbox.confirm("¿Esta seguro de activar esta cuenta?", function(result){
+		if (result) {
+			$.post("../ajax/cuenta.php?op=activar", {id_cta : id_cta}, function(e){
+				bootbox.alert(e);
+				//recargamos la tabla para que la vista carge los cambios hechos
+				tabla.ajax.reload();
+			});
+		}
+	})
 }
 
 

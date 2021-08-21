@@ -89,23 +89,34 @@ switch ($_GET["op"]) {
 		
 
 	break;
-	
 
-	case 'anular':
-		$rspta=$cuenta->anular($idventa);
-		echo $rspta ? "Ingreso anulado correctamente" : "No se pudo anular el ingreso";
-		break;
-	
+
 	case 'mostrar':
 		$id_cta= $_POST['id_cta'];
 		$rspta=$cuenta->mostrar($id_cta);
 		echo json_encode($rspta);
-		break;
+	break;
+
+	case 'desactivar':
+		$id_cta= $_POST['id_cta'];
+		$rspta=$cuenta->desactivar($id_cta);
+		echo $rspta ? "Cuenta anulada correctamente" : "No se pudo anular la cuenta";
+	break;
+	case 'activar':
+		$id_cta= $_POST['id_cta'];
+		$rspta=$cuenta->activar($id_cta);
+		echo $rspta ? "Cuenta activada correctamente" : "No se pudo desactivar la cuenta";
+	break;
+	
 
 	case 'crearMovimiento':
 
 		//obtenemos la fecha actual
+		
 		$date = date('Y-m-d h:i:s');
+
+		
+		
 
 		// sacamos los datos del formulario enviado por get
 		$id_cta=$_GET['id_cta'];
@@ -116,9 +127,34 @@ switch ($_GET["op"]) {
 		$rspta = $cuenta->info($id_cta);
 		$reg=$rspta->fetch_object();
 		if($id_tipo_mov=='6' AND $cuenta_ref_mov==''){
+
 			echo 'Cuenta de referencia para la transferencia no suministrada';
+
 		}elseif(($id_tipo_mov==1 OR $id_tipo_mov==3) OR floatval($reg->saldo_cta)>floatval($importe_mov)){
-				// verificamos si el usuario logeado es un cliente o un empleado
+
+			// cobramos el impuesto por transaccion anadiendolo al importe, sumando o restandole de ser correspondiente
+			
+			// impuesto establecido por cobrar por cada movimiento
+			$impuesto = 0.08;
+
+			if(($id_tipo_mov==1 OR $id_tipo_mov==3)){
+				// echo $importe_mov;
+				//convertimos a valor numerico el dato
+				$importe_mov = floatval($importe_mov);
+				//aplciamos el impuesto restandole al valor de la entrada
+				$importe_mov = $importe_mov - ($importe_mov*$impuesto);
+
+				// echo $importe_mov;
+
+
+			}else{
+				//convertimos a valor numerico el dato
+				$importe_mov = floatval($importe_mov);
+				//aplciamos el impuesto sumandole a el valor de la salida
+				$importe_mov = $importe_mov + ($importe_mov*$impuesto);
+			}
+
+			// verificamos si el usuario logeado es un cliente o un empleado
 
 			if($_SESSION['rol']==3){
 				// pasamos el id del empleado internet
@@ -147,14 +183,14 @@ switch ($_GET["op"]) {
 
 			$rspta = $cuenta->info($id_cta);
 			$reg=$rspta->fetch_object();
-			if($reg->num_mov_cuenta>15){
+			if($reg->num_mov_cuenta>15 AND $_SESSION['rol']==2){
 				// obtenemos la info de IFT para el tipo de moneda
 				$rspta     = $movimientos->info_IFT($reg->id_mon);
 				$reg_IFT   = $rspta->fetch_object();
 				
 				// se verifica que halla saldo para el cobro de IFT (lo dejo comentado por que no se si es necesario)
 				// if($reg->valor<$reg->sald_cta){
-					$rspta = $movimientos->impuesto($reg->valor,$fecha_creacion_mov,$id_empleado,$id_cta);
+					$rspta = $movimientos->iFT($reg_IFT->valor,$date,$id_empleado,$id_cta);
 				// }else{
 				// 	echo "Sin saldo para cobrar el IFT";
 				// }
@@ -166,21 +202,13 @@ switch ($_GET["op"]) {
 			echo 'Sin saldo para la transaccion';
 		}
 
-		
-		
-	break;
-		
 	
-	case 'anular':
-			$rspta=$cuenta->anular($idventa);
-			echo $rspta ? "Ingreso anulado correctamente" : "No se pudo anular el ingreso";
+	
 	break;
-		
-	case 'mostrar':
-			$id_cta= $_POST['id_cta'];
-			$rspta=$cuenta->mostrar($id_cta);
-			echo json_encode($rspta);
-	break;
+	
+
+	
+	
 
 	case 'listarMovimientos':
 		
@@ -203,19 +231,19 @@ switch ($_GET["op"]) {
 			);
 		}
 		$results=array(
-             "sEcho"=>1,//info para datatables
-             "iTotalRecords"=>count($data),//enviamos el total de registros al datatable
-             "iTotalDisplayRecords"=>count($data),//enviamos el total de registros a visualizar
-             "aaData"=>$data); 
+			"sEcho"=>1,//info para datatables
+			"iTotalRecords"=>count($data),//enviamos el total de registros al datatable
+			"iTotalDisplayRecords"=>count($data),//enviamos el total de registros a visualizar
+			"aaData"=>$data); 
 		echo json_encode($results);
 		
 		
+
+	break;
+
+	case 'listar':
+
 	
-		break;
-
-    case 'listar':
-
-		
 
 		// en caso de que el cliente sea el que realiza la accion
 		if( $_SESSION['rol']==3){
@@ -236,76 +264,52 @@ switch ($_GET["op"]) {
 		while ($reg=$rspta->fetch_object()) {
 
 			$data[]=array(
-            "0"=>(($reg->estado_cta==1)?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_cta.')"><i class="fa fa-eye"></i></button>':''),
-            "1"=>$reg->id_cta,
-            "2"=>$reg->saldo_cta,
-            "3"=>$reg->desc_mon,
-            "4"=>$reg->fecha_creacion_cta,
-            "5"=>$reg->num_mov_cuenta,
-            "6"=>($reg->estado_cta==1)?'<span class="label bg-green">Activa</span>':'<span class="label bg-red">Inactiva</span>'
-            );
+			"0"=>(($reg->estado_cta==1)?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_cta.')">
+										<i class="fa fa-eye"></i></button><button class="btn btn-danger btn-xs" 
+										onclick="desactivar('.$reg->id_cta.')"><i class="fa fa-close">'
+										:'<button class="btn btn-primary btn-xs" 
+										onclick="activar('.$reg->id_cta.')"><i class="fa fa-check">'),
+			"1"=>$reg->id_cta,
+			"2"=>$reg->saldo_cta,
+			"3"=>$reg->desc_mon,
+			"4"=>$reg->fecha_creacion_cta,
+			"5"=>$reg->num_mov_cuenta,
+			"6"=>($reg->estado_cta==1)?'<span class="label bg-green">Activa</span>':'<span class="label bg-red">Inactiva</span>'
+			);
 		}
 		$results=array(
-             "sEcho"=>1,//info para datatables
-             "iTotalRecords"=>count($data),//enviamos el total de registros al datatable
-             "iTotalDisplayRecords"=>count($data),//enviamos el total de registros a visualizar
-             "aaData"=>$data); 
+			"sEcho"=>1,//info para datatables
+			"iTotalRecords"=>count($data),//enviamos el total de registros al datatable
+			"iTotalDisplayRecords"=>count($data),//enviamos el total de registros a visualizar
+			"aaData"=>$data); 
 		// echo $results;
 		echo json_encode($results);
-		break;
+	break;
 
-		case 'selectTipoMon':
-			require_once "../modelos/tipo_mon.php";
-			$tipo_mon = new tipoMon();
+	case 'selectTipoMon':
+		require_once "../modelos/tipo_mon.php";
+		$tipo_mon = new tipoMon();
 
-			$rspta = $tipo_mon->listar();
+		$rspta = $tipo_mon->listar();
 
-			$options = '';
+		$options = '';
 
-			while ($reg = $rspta->fetch_object()) {
-				echo '<option value='.$reg->id_mon.'>'.$reg->desc_mon.'</option>';
-			}
-		break;
-
-		case 'selectTipoMov':
-			require_once "../modelos/tipo_mov.php";
-			$tipo_mov = new tipoMov();
-
-			$rspta = $tipo_mov->listar();
-
-			$options = '';
-
-			while ($reg = $rspta->fetch_object()) {
-				echo '<option value='.$reg->id_tipo_mov.'>'.$reg->nombre_mov.'</option>';
-			}
-		break;
-
-		case 'listarArticulos':
-		require_once "../modelos/Articulo.php";
-		$articulo=new Articulo();
-
-				$rspta=$articulo->listarActivosVenta();
-		$data=Array();
-
-		while ($reg=$rspta->fetch_object()) {
-			$data[]=array(
-            "0"=>'<button class="btn btn-warning" onclick="agregarDetalle('.$reg->idarticulo.',\''.$reg->nombre.'\','.$reg->precio_venta.')"><span class="fa fa-plus"></span></button>',
-            "1"=>$reg->nombre,
-            "2"=>$reg->categoria,
-            "3"=>$reg->codigo,
-            "4"=>$reg->stock,
-            "5"=>$reg->precio_venta,
-            "6"=>"<img src='../files/articulos/".$reg->imagen."' height='50px' width='50px'>"
-          
-              );
+		while ($reg = $rspta->fetch_object()) {
+			echo '<option value='.$reg->id_mon.'>'.$reg->desc_mon.'</option>';
 		}
-		$results=array(
-             "sEcho"=>1,//info para datatables
-             "iTotalRecords"=>count($data),//enviamos el total de registros al datatable
-             "iTotalDisplayRecords"=>count($data),//enviamos el total de registros a visualizar
-             "aaData"=>$data); 
-		echo json_encode($results);
+	break;
 
-				break;
+	case 'selectTipoMov':
+		require_once "../modelos/tipo_mov.php";
+		$tipo_mov = new tipoMov();
+
+		$rspta = $tipo_mov->listar();
+
+		$options = '';
+
+		while ($reg = $rspta->fetch_object()) {
+			echo '<option value='.$reg->id_tipo_mov.'>'.$reg->nombre_mov.'</option>';
+		}
+	break;
 }
  ?>

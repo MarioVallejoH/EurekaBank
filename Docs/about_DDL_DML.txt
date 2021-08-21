@@ -1,0 +1,19 @@
+DDL y DML
+Las sentencias SQL se dividen en dos categorías; Lenguaje de definición de datos; data definition language (DDL) y Lenguaje de manipulación de datos ;data manipulation language (DML).
+
+Lenguaje de definición de datos (DDL)
+Las sentencias DDL se utilizan para crear y modificar la estructura de las tablas así como otros objetos de la base de datos.
+
+CREATE - para crear objetos en la base de datos.
+ALTER - modifica la estructura de la base de datos.
+DROP - borra objetos de la base de datos.
+TRUNCATE - elimina todos los registros de la tabla, incluyendo todos los espacios asignados a los registros.
+
+
+Lenguaje de manipulación de datos (DML)
+Las sentencias de lenguaje de manipulación de datos (DML) son utilizadas para gestionar datos dentro de los schemas. Algunos ejemplos:
+
+SELECT - para obtener datos de una base de datos.
+INSERT - para insertar datos a una tabla.
+UPDATE - para modificar datos existentes dentro de una tabla.
+DELETE - elimina todos los registros de la tabla; no borra los espacios asignados a los registros.

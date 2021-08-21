@@ -2,9 +2,11 @@ var tabla;
 
 //funcion que se ejecuta al inicio
 function init(){
+	// console.log('hols');
+
    mostrarform(false);
    listar();
-
+	// listener de el formulario esperando la accion submit para luego ejecutar una funcion
    $("#formulario").on("submit",function(e){
    	guardaryeditar(e);
    })
@@ -52,12 +54,18 @@ function cancelarform(){
 	mostrarform(false);
 }
 
-//funcion listar
+//funcion listar que carga datos a la tabla tbllistado usando datatables con ajax
+// documentacion https://datatables.net/examples/ajax/
 function listar(){
+
+	
 	tabla=$('#tbllistado').dataTable({
+		// parametros opcionales para cargar la tabla
 		"aProcessing": true,//activamos el procedimiento del datatable
 		"aServerSide": true,//paginacion y filrado realizados por el server
 		dom: 'Bfrtip',//definimos los elementos del control de la tabla
+		// seleccionamos los botones disponibles para cargar con la tabla,
+		// el funcionamiento de los botones se encuentra en la documentacion
 		buttons: [
                   'copyHtml5',
                   'excelHtml5',
@@ -66,6 +74,7 @@ function listar(){
 		],
 		"ajax":
 		{
+			// solicitamos a ajax enviando por get la op=listar que nos liste los registros
 			url:'../ajax/empleado.php?op=listar',
 			type: "get",
 			dataType : "json",
@@ -75,7 +84,6 @@ function listar(){
 		},
 		"bDestroy":true,
 		"iDisplayLength":5,//paginacion
-		// "order":[[0,"desc"]]//ordenar (columna, orden)
 	}).DataTable();
 }
 //funcion para guardaryeditar
@@ -94,7 +102,7 @@ function guardaryeditar(e){
      	success: function(datos){
 			console.log(datos);
 
-     		// bootbox.alert(datos);
+     		bootbox.alert(datos);
      		mostrarform(false);
      		tabla.ajax.reload();
      	}
@@ -104,6 +112,7 @@ function guardaryeditar(e){
 }
 
 function mostrar(id_empleado){
+	limpiar();
 	// llamamos una funcion de ajax y enviamos parametros por post
 	$.post("../ajax/empleado.php?op=mostrar",{id_empleado : id_empleado},
 		function(data,status)
@@ -134,22 +143,31 @@ function mostrar(id_empleado){
 
 function desactivar(id_empleado, id_usuario){
 	// console.log(id_usuario);
-	
-	// llamamos una funcion de ajax y enviamos parametros por post
-	$.post("../ajax/empleado.php?op=desactivar", {id_empleado : id_empleado,id_usuario : id_usuario}, function(e){
-		// bootbox.alert(e);
-		console.log(e);
-		tabla.ajax.reload();
+	bootbox.confirm("¿Esta seguro de desactivar este dato?", function(result){
+		if (result) {
+			// llamamos una funcion de ajax y enviamos parametros por post
+			$.post("../ajax/empleado.php?op=desactivar", {id_empleado : id_empleado,id_usuario : id_usuario}, function(e){
+				// bootbox.alert(e);
+				console.log(e);
+				tabla.ajax.reload();
+			})
+		}
 	})
 }
 
 function activar(id_empleado,id_usuario){
-	// llamamos una funcion de ajax y enviamos parametros por post
-	$.post("../ajax/empleado.php?op=activar", {id_empleado : id_empleado,id_usuario : id_usuario}, function(e){
-		// bootbox.alert(e);
-		console.log(e);
-		tabla.ajax.reload();
-	});
+
+	// preguntamos al usuario si esta seguro
+	bootbox.confirm("¿Esta seguro de desactivar este dato?", function(result){
+			if (result) {
+			// llamamos una funcion de ajax y enviamos parametros por post
+			$.post("../ajax/empleado.php?op=activar", {id_empleado : id_empleado,id_usuario : id_usuario}, function(e){
+				// bootbox.alert(e);
+				console.log(e);
+				tabla.ajax.reload();
+			});
+			}
+	})
 	
 }
 

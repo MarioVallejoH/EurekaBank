@@ -63,8 +63,8 @@ if ($_SESSION['rol']==3 OR $_SESSION['rol']==2) {
                       
                     <div class="form-group col-lg-4 col-md-4 col-xs-12">
                       <label for="">Moneda:</label>
-                      <select name="id_tipo_mon" id="id_tipo_mon" class="form-control selectpicker" data-live-search="true" required >
-                        
+                      <select name="id_tipo_mon" id="id_tipo_mon" class="form-control form-select" data-live-search="true" required >
+                        <option selected>Seleccione un tipo de moneda</option>
                       </select>
 
                       <label for="">Saldo: </label>

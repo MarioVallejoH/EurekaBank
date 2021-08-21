@@ -2,10 +2,10 @@
 -- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Aug 18, 2021 at 09:01 AM
--- Server version: 10.4.20-MariaDB
--- PHP Version: 7.3.29
+-- Servidor: localhost
+-- Tiempo de generación: 21-08-2021 a las 11:53:29
+-- Versión del servidor: 10.4.20-MariaDB
+-- Versión de PHP: 7.3.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,18 +18,18 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `dbsistema`
+-- Base de datos: `dbsistema`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `clientes`
+-- Estructura de tabla para la tabla `clientes`
 --
 
 CREATE TABLE `clientes` (
-  `id_cli` int(11) NOT NULL,
-  `telefono_cli` varchar(20) DEFAULT NULL,
+  `id_cliente` int(11) NOT NULL,
+  `telefono_cli` varchar(10) DEFAULT NULL,
   `correo_cli` varchar(50) DEFAULT NULL,
   `id_usuario` int(11) NOT NULL,
   `id_persona` int(11) NOT NULL
@@ -38,33 +38,34 @@ CREATE TABLE `clientes` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cuentas`
+-- Estructura de tabla para la tabla `cuentas`
 --
 
 CREATE TABLE `cuentas` (
-  `id_cta` int(11) NOT NULL,
-  `saldo_cta` double NOT NULL,
+  `id_cta` int(15) NOT NULL,
+  `saldo_cta` decimal(12,2) NOT NULL,
   `fecha_creacion_cta` datetime NOT NULL,
   `estado_cta` tinyint(1) NOT NULL,
-  `num_mov_cuenta` int(11) NOT NULL,
-  `clave_cta` int(11) NOT NULL,
-  `id_empleado` int(11) NOT NULL,
-  `id_cliente` int(11) NOT NULL,
-  `id_sucur` int(11) NOT NULL
+  `num_mov_cuenta` int(10) NOT NULL,
+  `clave_cta` char(4) NOT NULL,
+  `id_mon` int(2) NOT NULL,
+  `id_empleado` int(4) NOT NULL,
+  `id_cliente` int(4) NOT NULL,
+  `id_sucursal` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `empleados`
+-- Estructura de tabla para la tabla `empleados`
 --
 
 CREATE TABLE `empleados` (
-  `id_empleado` int(11) NOT NULL,
+  `id_empleado` int(4) NOT NULL,
   `correo_emp` varchar(50) NOT NULL,
-  `telefono_emp` varchar(20) NOT NULL,
+  `telefono_emp` varchar(10) NOT NULL,
   `fecha_creacion_emp` date NOT NULL,
-  `fecha_baja_emp` date NOT NULL,
+  `fecha_baja_emp` date DEFAULT NULL,
   `id_persona` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `id_sucursal` int(11) NOT NULL
@@ -73,111 +74,109 @@ CREATE TABLE `empleados` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `movimientos`
+-- Estructura de tabla para la tabla `movimientos`
 --
 
 CREATE TABLE `movimientos` (
-  `id_mov` int(11) NOT NULL,
+  `id_mov` int(10) NOT NULL,
   `fecha_creacion_mov` datetime NOT NULL,
-  `importe_mov` double NOT NULL,
-  `cuenta_ref_mov` int(11) NOT NULL,
+  `importe_mov` decimal(12,2) NOT NULL,
+  `cuenta_ref_mov` int(15) DEFAULT NULL,
   `estado_mov` tinyint(1) NOT NULL,
-  `accion_mov` tinyint(1) NOT NULL,
-  `id_empleado` int(11) NOT NULL,
-  `id_cuenta` int(11) NOT NULL,
-  `id_tipo_mov` int(11) NOT NULL
+  `id_empleado` int(4) NOT NULL,
+  `id_cta` int(15) NOT NULL,
+  `id_tipo_mov` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `persona`
+-- Estructura de tabla para la tabla `persona`
 --
 
 CREATE TABLE `persona` (
   `id_persona` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `primer_apellido` varchar(30) NOT NULL,
-  `segundo_apellido` varchar(30) NOT NULL,
-  `num_documento` varchar(20) NOT NULL,
-  `ciudad` varchar(30) NOT NULL,
-  `direccion` varchar(70) NOT NULL
+  `nombre_per` varchar(100) NOT NULL,
+  `primer_ape_per` varchar(30) NOT NULL,
+  `segundo_ape_per` varchar(30) NOT NULL,
+  `cedula_per` varchar(15) NOT NULL,
+  `ciudad_resid_per` varchar(20) NOT NULL,
+  `dir_resid_per` varchar(70) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
 
 --
--- Table structure for table `roles`
+-- Estructura de tabla para la tabla `roles`
 --
+
 
 CREATE TABLE `roles` (
   `id_rol` int(11) NOT NULL,
   `nombre_rol` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
+
 
 --
--- Table structure for table `sucursales`
+-- Estructura de tabla para la tabla `sucursales`
 --
 
 CREATE TABLE `sucursales` (
-  `id_sucur` int(11) NOT NULL,
-  `nombre_sucur` varchar(100) NOT NULL,
-  `ciudad_sucur` varchar(30) NOT NULL,
+  `id_sucursal` int(3) NOT NULL,
+  `nombre_sucur` varchar(50) NOT NULL,
+  `ciudad_sucur` varchar(20) NOT NULL,
   `direccion_sucur` varchar(50) NOT NULL,
-  `num_ctas_sucur` int(11) NOT NULL,
+  `num_ctas_sucur` int(10) NOT NULL,
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `tipo_movimiento`
+-- Estructura de tabla para la tabla `tipo_movimiento`
 --
 
 CREATE TABLE `tipo_movimiento` (
-  `id_tipo_mov` int(11) NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1,
-  `nombre_mov` varchar(100) NOT NULL
+  `id_tipo_mov` int(2) NOT NULL,
+  `estado` tinyint(1) NOT NULL DEFAULT 1,
+  `nombre_mov` varchar(50) NOT NULL,
+  `accion_tipo_mov` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
 
 --
--- Table structure for table `usuarios`
+-- Estructura de tabla para la tabla `usuarios`
 --
 
 CREATE TABLE `usuarios` (
   `id_usuario` int(11) NOT NULL,
-  `nombre_usu` varchar(100) NOT NULL,
-  `contraseña_usu` varchar(50) NOT NULL,
-  `id_rol` int(11) NOT NULL
+  `nombre_usu` varchar(30) NOT NULL,
+  `contraseña_usu` varchar(64) NOT NULL,
+  `estado` tinyint(1) NOT NULL,
+  `id_rol` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+--
+-- Índices para tablas volcadas
+--
 
 --
--- Indexes for dumped tables
---
-
---
--- Indexes for table `clientes`
+-- Indices de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  ADD PRIMARY KEY (`id_cli`),
+  ADD PRIMARY KEY (`id_cliente`),
   ADD KEY `id_usuario` (`id_usuario`),
   ADD KEY `id_persona` (`id_persona`);
 
 --
--- Indexes for table `cuentas`
+-- Indices de la tabla `cuentas`
 --
 ALTER TABLE `cuentas`
   ADD PRIMARY KEY (`id_cta`),
   ADD KEY `id_empleado` (`id_empleado`),
   ADD KEY `id_cliente` (`id_cliente`),
-  ADD KEY `id_sucursal` (`id_sucur`);
+  ADD KEY `id_sucursal` (`id_sucursal`),
+  ADD KEY `id_mon` (`id_mon`);
 
 --
--- Indexes for table `empleados`
+-- Indices de la tabla `empleados`
 --
 ALTER TABLE `empleados`
   ADD PRIMARY KEY (`id_empleado`),
@@ -186,147 +185,148 @@ ALTER TABLE `empleados`
   ADD KEY `id_persona` (`id_persona`);
 
 --
--- Indexes for table `movimientos`
+-- Indices de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
   ADD PRIMARY KEY (`id_mov`),
   ADD KEY `id_empleado` (`id_empleado`),
-  ADD KEY `id_cuenta` (`id_cuenta`),
+  ADD KEY `id_cuenta` (`id_cta`),
   ADD KEY `id_tipo_mov` (`id_tipo_mov`);
 
 --
--- Indexes for table `persona`
+-- Indices de la tabla `persona`
 --
 ALTER TABLE `persona`
   ADD PRIMARY KEY (`id_persona`);
 
 --
--- Indexes for table `roles`
+-- Indices de la tabla `roles`
 --
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`id_rol`);
 
 --
--- Indexes for table `sucursales`
+-- Indices de la tabla `sucursales`
 --
 ALTER TABLE `sucursales`
-  ADD PRIMARY KEY (`id_sucur`),
+  ADD PRIMARY KEY (`id_sucursal`),
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
--- Indexes for table `tipo_movimiento`
+-- Indices de la tabla `tipo_movimiento`
 --
 ALTER TABLE `tipo_movimiento`
   ADD PRIMARY KEY (`id_tipo_mov`);
 
 --
--- Indexes for table `usuarios`
+-- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id_usuario`),
   ADD KEY `id_rol` (`id_rol`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `clientes`
+-- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id_cli` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `cuentas`
+-- AUTO_INCREMENT de la tabla `cuentas`
 --
 ALTER TABLE `cuentas`
-  MODIFY `id_cta` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_cta` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `empleados`
+-- AUTO_INCREMENT de la tabla `empleados`
 --
 ALTER TABLE `empleados`
-  MODIFY `id_empleado` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_empleado` int(4) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `movimientos`
+-- AUTO_INCREMENT de la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
-  MODIFY `id_mov` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_mov` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
--- AUTO_INCREMENT for table `persona`
+-- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1002;
 
 --
--- AUTO_INCREMENT for table `roles`
+-- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `sucursales`
+-- AUTO_INCREMENT de la tabla `sucursales`
 --
 ALTER TABLE `sucursales`
-  MODIFY `id_sucur` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_sucursal` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `tipo_movimiento`
+-- AUTO_INCREMENT de la tabla `tipo_movimiento`
 --
 ALTER TABLE `tipo_movimiento`
-  MODIFY `id_tipo_mov` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tipo_mov` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `usuarios`
+-- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- Constraints for dumped tables
+-- Restricciones para tablas volcadas
 --
 
 --
--- Constraints for table `clientes`
+-- Filtros para la tabla `clientes`
 --
 ALTER TABLE `clientes`
   ADD CONSTRAINT `clientes_ibfk_1` FOREIGN KEY (`id_persona`) REFERENCES `persona` (`id_persona`),
   ADD CONSTRAINT `clientes_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
 
 --
--- Constraints for table `cuentas`
+-- Filtros para la tabla `cuentas`
 --
 ALTER TABLE `cuentas`
   ADD CONSTRAINT `cuentas_ibfk_1` FOREIGN KEY (`id_empleado`) REFERENCES `empleados` (`id_empleado`),
-  ADD CONSTRAINT `cuentas_ibfk_2` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id_cli`),
-  ADD CONSTRAINT `cuentas_ibfk_3` FOREIGN KEY (`id_sucur`) REFERENCES `sucursales` (`id_sucur`);
+  ADD CONSTRAINT `cuentas_ibfk_2` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id_cliente`),
+  ADD CONSTRAINT `cuentas_ibfk_3` FOREIGN KEY (`id_sucursal`) REFERENCES `sucursales` (`id_sucursal`),
+  ADD CONSTRAINT `cuentas_ibfk_4` FOREIGN KEY (`id_mon`) REFERENCES `tipo_moneda` (`id_mon`);
 
 --
--- Constraints for table `empleados`
+-- Filtros para la tabla `empleados`
 --
 ALTER TABLE `empleados`
   ADD CONSTRAINT `empleados_ibfk_1` FOREIGN KEY (`id_persona`) REFERENCES `persona` (`id_persona`),
   ADD CONSTRAINT `empleados_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`),
-  ADD CONSTRAINT `empleados_ibfk_3` FOREIGN KEY (`id_sucursal`) REFERENCES `sucursales` (`id_sucur`);
+  ADD CONSTRAINT `empleados_ibfk_3` FOREIGN KEY (`id_sucursal`) REFERENCES `sucursales` (`id_sucursal`);
 
 --
--- Constraints for table `movimientos`
+-- Filtros para la tabla `movimientos`
 --
 ALTER TABLE `movimientos`
   ADD CONSTRAINT `movimientos_ibfk_1` FOREIGN KEY (`id_tipo_mov`) REFERENCES `tipo_movimiento` (`id_tipo_mov`),
   ADD CONSTRAINT `movimientos_ibfk_2` FOREIGN KEY (`id_empleado`) REFERENCES `empleados` (`id_empleado`),
-  ADD CONSTRAINT `movimientos_ibfk_3` FOREIGN KEY (`id_cuenta`) REFERENCES `cuentas` (`id_cta`);
+  ADD CONSTRAINT `movimientos_ibfk_3` FOREIGN KEY (`id_cta`) REFERENCES `cuentas` (`id_cta`);
 
 --
--- Constraints for table `sucursales`
+-- Filtros para la tabla `sucursales`
 --
 ALTER TABLE `sucursales`
   ADD CONSTRAINT `sucursales_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
 
 --
--- Constraints for table `usuarios`
+-- Filtros para la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id_rol`);

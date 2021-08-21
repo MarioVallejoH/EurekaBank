@@ -63,6 +63,7 @@ class Cliente{
 		INNER JOIN usuarios u ON u.id_usuario=c.id_usuario WHERE u.id_rol='3'";
 		// echo $sql;
 		return ejecutarConsulta($sql);
+		
 	}
 
 	public function obtener_id($id_usuario){
@@ -74,7 +75,15 @@ class Cliente{
 
 	}
 
+	public function info($id_usuario){
+		$sql="SELECT p.nombre_per,p.primer_ape_per,p.segundo_ape_per FROM clientes c 
+		INNER JOIN persona p ON p.id_persona=c.id_persona WHERE c.id_usuario='$id_usuario'";
+		return ejecutarConsulta($sql);
+	}
+
 	
 	}
+
+	
 
  ?>

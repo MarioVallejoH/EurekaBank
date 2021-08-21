@@ -2,14 +2,14 @@ var tabla;
 
 //funcion que se ejecuta al inicio
 function init(){
+   //ocultamos el formulario
    mostrarform(false);
    listar();
-
+   // listener de el formulario esperando la accion submit para luego ejecutar una funcion
    $("#formulario").on("submit",function(e){
-   	guardaryeditar(e);
+	   // funcion a ejecutar
+   		guardaryeditar(e);
    })
-
-   $("#imagenmuestra").hide();
 
 }
 
@@ -19,9 +19,9 @@ function cuentas(id_cliente){
 	$(location).attr("href","cliente_cuentas.php?id_cliente="+id_cliente);
 }
 
-//funcion limpiar
+//funcion limpiar, resetea los campos del formulario
 function limpiar(){
-	
+
 	$("#id_usuario").val("");
 	$("#nombre").val("");
 	$("#primer_apellido").val("");
@@ -38,8 +38,12 @@ function limpiar(){
 
 //funcion mostrar formulario
 function mostrarform(flag){
+
 	limpiar();
+
+	// mostramos u ocultamos elementos de la vista en base a el booleano flag
 	if(flag){
+		
 		$("#listadoregistros").hide();
 		$("#formularioregistros").show();
 		$("#btnGuardar").prop("disabled",false);
@@ -54,15 +58,21 @@ function mostrarform(flag){
 //cancelar form
 function cancelarform(){
 	limpiar();
+	// ocultamos el formulario
 	mostrarform(false);
 }
 
-//funcion listar
+//funcion listar que carga datos a la tabla tbllistado usando datatables con ajax
+// documentacion https://datatables.net/examples/ajax/
 function listar(){
 	tabla=$('#tbllistado').dataTable({
+
+		// parametros opcionales para cargar la tabla
 		"aProcessing": true,//activamos el procedimiento del datatable
 		"aServerSide": true,//paginacion y filrado realizados por el server
 		dom: 'Bfrtip',//definimos los elementos del control de la tabla
+		// seleccionamos los botones disponibles para cargar con la tabla,
+		// el funcionamiento de los botones se encuentra en la documentacion
 		buttons: [
                   'copyHtml5',
                   'excelHtml5',
@@ -70,7 +80,8 @@ function listar(){
                   'pdf'
 		],
 		"ajax":
-		{
+		{	
+			// solicitamos a cliente.php enviando por get la op=listar que nos liste los registros
 			url:'../ajax/cliente.php?op=listar',
 			type: "get",
 			dataType : "json",
@@ -80,27 +91,34 @@ function listar(){
 		},
 		"bDestroy":true,
 		"iDisplayLength":5,//paginacion
-		"order":[[0,"desc"]]//ordenar (columna, orden)
+		"order":[[0,"desc"]]//ordenar datos de mas reciente a menos reciente
 	}).DataTable();
 }
-//funcion para guardaryeditar
+
+//funcion para guardaryeditar clientes
 function guardaryeditar(e){
      e.preventDefault();//no se activara la accion predeterminada 
+
+	 // desabilitamos el boton guardar durante la transaccion
      $("#btnGuardar").prop("disabled",true);
+
+	 //obtenemos los datos almacenados en el formulario con id
      var formData=new FormData($("#formulario")[0]);
 
+	 // usando ajax enviamos el formulario para ser registrado
      $.ajax({
      	url: "../ajax/cliente.php?op=guardaryeditar",
      	type: "POST",
      	data: formData,
      	contentType: false,
      	processData: false,
-
+		// funcion que se ejecuta en caso de exito al registrar el formulario
      	success: function(datos){
 			console.log(datos);
 
-     		// bootbox.alert(datos);
+     		bootbox.alert(datos);
      		mostrarform(false);
+			 // recargamos la tabla para que sean visibles los registros
      		tabla.ajax.reload();
      	}
      });
@@ -136,24 +154,35 @@ function mostrar(id_cliente){
 };
 
 
-//funcion para desactivar
+// IMPORTANTE estas dos funciones no se usan actualmente, pero podrian ser necesarias
+
+
+//funcion para desactivar un cliente
 
 function desactivar(id_cliente, id_usuario){
 	// console.log(id_usuario);
-	
+	bootbox.confirm("¿Esta seguro de desactivar este dato?", function(result){
+		if (result) {
+			// llamamos una funcion de ajax y enviamos parametros por post
 	// llamamos una funcion de ajax y enviamos parametros por post
-	$.post("../ajax/cliente.php?op=desactivar", {id_cliente : id_cliente,id_usuario : id_usuario}, function(e){
-		// bootbox.alert(e);
-		console.log(e);
-		tabla.ajax.reload();
+			$.post("../ajax/cliente.php?op=desactivar", {id_cliente : id_cliente,id_usuario : id_usuario}, function(e){
+				// bootbox.alert(e);
+				console.log(e);
+
+				// recargamos la tabla para hacer efectivo en la vista el cambio hecho en la consulta
+				tabla.ajax.reload();
+			})
+		}
 	})
 }
-
+// funcion para activar un cliente
 function activar(id_cliente,id_usuario){
 	// llamamos una funcion de ajax y enviamos parametros por post
 	$.post("../ajax/cliente.php?op=activar", {id_cliente : id_cliente,id_usuario : id_usuario}, function(e){
 		// bootbox.alert(e);
 		console.log(e);
+		// recargamos la tabla para hacer efectivo en la vista el cambio hecho en la consulta
+		
 		tabla.ajax.reload();
 	});
 	

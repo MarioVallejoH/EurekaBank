@@ -57,8 +57,10 @@ switch ($_GET["op"]) {
 			if (empty($id_empleado)) {
 				// creacion de un nuevo usuario
 				$id_usuario = $usuario->insertar($cedula_per,$clavehash,2);
+				
 				// verificamos que el usuario se halla creado
 				if(!empty($id_usuario)){
+					// echo $id_usuario;
 					// creamos el empleado
 					//sacamos el id de la sucursal almacenado en las variables de sesion
 

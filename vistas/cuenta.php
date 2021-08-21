@@ -20,21 +20,21 @@ if (!empty($_SESSION['rol'])) {
       <div class="row">
         <div class="col-md-12">
       <div class="box">
-<div class="box-header with-border">
-  <h1 class="box-title">Cuenta No. <?php echo $_GET['id_cta'] ?></h1>
-  <div class="box-tools pull-right">
-    
-  </div>
-</div>
-<!--box-header-->
-<!--centro-->
-<div class="panel-body" style="height: 400px;" id="formularioregistros">
-  <form action="" name="formulario" id="formulario" method="POST">
+    <div class="box-header with-border">
+      <h1 class="box-title">Cuenta No. <?php echo $_GET['id_cta'] ?></h1>
+      <div class="box-tools pull-right">
+        
+      </div>
+    </div>
+    <!--box-header-->
+    <!--centro-->
+    <div class="panel-body" style="height: 400px;" id="formularioregistros">
+      <form action="" name="formulario" id="formulario" method="POST">
       
     <div class="form-group col-lg-4 col-md-4 col-xs-12">
       <label for="">Moneda:</label>
       <input class="form-control" type="hidden" name="id_cta" id="id_cta" value ="<?php echo $_GET['id_cta'] ?> " >
-      <select name="id_tipo_mon" id="id_tipo_mon" class="form-control selectpicker" data-live-search="true" required readonly>
+      <select name="id_tipo_mon" id="id_tipo_mon" class="form-control" data-live-search="true" required readonly>
         
       </select>
 
@@ -62,8 +62,8 @@ if (!empty($_SESSION['rol'])) {
        <button id="btnAgregarArt" type="button" class="btn btn-primary"><span class="fa fa-plus"></span> Nuevo Movimiento</button>
      </a>
     </div>
-<div class="form-group col-lg-12 col-md-12 col-xs-12">
-     <table id="tblmovimientos" class="table table-striped table-bordered table-condensed table-hover">
+    <div class="form-group col-lg-12 col-md-12 col-xs-12">
+      <table id="tblmovimientos" class="table table-striped table-bordered table-condensed table-hover">
        <thead style="background-color:#A9D0F5">
         <th>Numero</th>
         <th>Fecha de creación</th>
@@ -115,7 +115,7 @@ if (!empty($_SESSION['rol'])) {
           <form action="" name="formularioMov" id="formularioMov" method="POST">
             <div>
               <label for="">Tipo de movimiento:</label>
-              <select name="id_tipo_mov" id="id_tipo_mov" class="form-control selectpicker" data-live-search="true" required readonly>
+              <select name="id_tipo_mov" id="id_tipo_mov" class="form-control" data-live-search="true" required readonly>
               
               </select>
             </div>

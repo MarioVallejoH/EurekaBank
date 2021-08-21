@@ -38,16 +38,7 @@ if (strlen(session_id())<1)
     <!-- Logo -->
     
     <!-- href basado en el rol de el usuario -->
-    <a class="logo" href= <?php 
-            if ($_SESSION['rol']==1) {
-              echo 'empleados.php';
-            }elseif($_SESSION['rol']==2){
-              echo 'clientes.php';
-            }else{
-              echo 'cliente_cuentas.php';
-            }
-          ?> 
-        >
+    <a class="logo" href= 'home.php'>
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>E</b>B</span>
       

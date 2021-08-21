@@ -13,8 +13,8 @@ class Empleado{
 	public function insertar($correo_emp,$telefono_emp,$id_persona,$id_usuario){
 		// obtener id de la sucursal asociada al usuario logeado
 		$date = date('Y-m-d');
-		$id_usuario = $_SESSION['id_usuario'];
-		$sql = "SELECT id_sucursal FROM sucursales WHERE id_usuario='$id_usuario'";
+		$id_usu_suc = $_SESSION['id_usuario'];
+		$sql = "SELECT id_sucursal FROM sucursales WHERE id_usuario='$id_usu_suc'";
 		$rspta = ejecutarConsulta($sql);
 		$fetch=$rspta->fetch_object();
 		if(!empty($fetch->id_sucursal)){
@@ -64,7 +64,7 @@ class Empleado{
 	public function listar(){
 		$sql="SELECT p.nombre_per,p.primer_ape_per,p.segundo_ape_per,p.cedula_per,p.ciudad_resid_per,e.fecha_creacion_emp,e.fecha_baja_emp,s.nombre_sucur,
 		e.id_empleado,e.id_usuario,u.estado FROM persona p INNER JOIN empleados e ON e.id_persona=p.id_persona INNER JOIN sucursales s ON s.id_sucursal=e.id_sucursal
-		INNER JOIN usuarios u ON u.id_usuario=e.id_usuario WHERE e.id_empleado!='9999'";
+		INNER JOIN usuarios u ON u.id_usuario=e.id_usuario WHERE e.id_empleado!='1'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -75,6 +75,13 @@ class Empleado{
 		// echo $sql;
 		return ejecutarConsulta($sql);
 
+	}
+
+	public function info($id_usuario){
+		$sql="SELECT p.nombre_per,p.primer_ape_per,p.segundo_ape_per FROM empleados e 
+		INNER JOIN persona p ON p.id_persona=e.id_persona WHERE e.id_usuario='$id_usuario'";
+		// echo $sql;
+		return ejecutarConsulta($sql);
 	}
 
 	

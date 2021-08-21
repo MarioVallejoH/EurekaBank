@@ -14,6 +14,12 @@
 	// obtener info de valores de IFT
 	public function listar(){
 		$sql="SELECT * FROM sucursales";
+		echo $sql;
+		return ejecutarConsulta($sql);
+	}
+
+	public function info($id_usuario){
+		$sql="SELECT s.nombre_sucur FROM sucursales s WHERE s.id_usuario='$id_usuario'";
 		return ejecutarConsulta($sql);
 	}
 

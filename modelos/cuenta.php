@@ -18,8 +18,14 @@
 		return ejecutarConsulta_retornarID($sql);;
 	}
 
-	public function anular($id_cta){
-		$sql="UPDATE cuenta SET estado='Anulado' WHERE id_cta='$id_cta'";
+	public function desactivar($id_cta){
+		$sql="UPDATE cuentas SET estado_cta='0' WHERE id_cta='$id_cta'";
+		// echo $sql;
+		return ejecutarConsulta($sql);
+	}
+
+	public function activar($id_cta){
+		$sql="UPDATE cuentas SET estado_cta='1' WHERE id_cta='$id_cta'";
 		return ejecutarConsulta($sql);
 	}
 
