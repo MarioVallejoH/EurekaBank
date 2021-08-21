@@ -69,6 +69,8 @@
 			$sql="INSERT INTO movimientos (importe_mov,cuenta_ref_mov,fecha_creacion_mov,id_empleado,id_cta,id_tipo_mov,
 				estado_mov) VALUES ('$importe_mov',NULL,'$fecha_creacion_mov','$id_empleado','$id_cta',
 				'$id_tipo_mov','1')";
+
+			// echo $sql; 
 			$id_mov = ejecutarConsulta_retornarID($sql);
 
 			

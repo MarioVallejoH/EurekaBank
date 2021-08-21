@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 21-08-2021 a las 11:53:29
+-- Tiempo de generación: 21-08-2021 a las 19:11:47
 -- Versión del servidor: 10.4.20-MariaDB
 -- Versión de PHP: 7.3.29
 
@@ -28,12 +28,27 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `clientes` (
-  `id_cliente` int(11) NOT NULL,
+  `id_cliente` int(4) NOT NULL,
   `telefono_cli` varchar(10) DEFAULT NULL,
   `correo_cli` varchar(50) DEFAULT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_persona` int(11) NOT NULL
+  `id_usuario` int(4) NOT NULL,
+  `id_persona` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `costos`
+--
+
+CREATE TABLE `costos` (
+  `id_costo` int(2) NOT NULL,
+  `id_mon` int(2) NOT NULL,
+  `valor` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
 
 -- --------------------------------------------------------
 
@@ -66,10 +81,38 @@ CREATE TABLE `empleados` (
   `telefono_emp` varchar(10) NOT NULL,
   `fecha_creacion_emp` date NOT NULL,
   `fecha_baja_emp` date DEFAULT NULL,
-  `id_persona` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_sucursal` int(11) NOT NULL
+  `id_persona` int(4) NOT NULL,
+  `id_usuario` int(4) NOT NULL,
+  `id_sucursal` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `intereses`
+--
+
+CREATE TABLE `intereses` (
+  `id_interes` int(2) NOT NULL,
+  `id_mon` int(2) NOT NULL,
+  `valor` decimal(10,8) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `mantenimientos`
+--
+
+CREATE TABLE `mantenimientos` (
+  `id_mantenimiento` int(2) NOT NULL,
+  `id_mon` int(2) NOT NULL,
+  `valor` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 -- --------------------------------------------------------
 
@@ -95,7 +138,7 @@ CREATE TABLE `movimientos` (
 --
 
 CREATE TABLE `persona` (
-  `id_persona` int(11) NOT NULL,
+  `id_persona` int(4) NOT NULL,
   `nombre_per` varchar(100) NOT NULL,
   `primer_ape_per` varchar(30) NOT NULL,
   `segundo_ape_per` varchar(30) NOT NULL,
@@ -105,17 +148,19 @@ CREATE TABLE `persona` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+-- --------------------------------------------------------
+
 --
 -- Estructura de tabla para la tabla `roles`
 --
 
-
 CREATE TABLE `roles` (
-  `id_rol` int(11) NOT NULL,
+  `id_rol` int(2) NOT NULL,
   `nombre_rol` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `sucursales`
@@ -130,6 +175,23 @@ CREATE TABLE `sucursales` (
   `id_usuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipo_moneda`
+--
+
+CREATE TABLE `tipo_moneda` (
+  `id_mon` int(2) NOT NULL,
+  `desc_mon` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+-- --------------------------------------------------------
+
 --
 -- Estructura de tabla para la tabla `tipo_movimiento`
 --
@@ -142,17 +204,23 @@ CREATE TABLE `tipo_movimiento` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+
+-- --------------------------------------------------------
+
 --
 -- Estructura de tabla para la tabla `usuarios`
 --
 
 CREATE TABLE `usuarios` (
-  `id_usuario` int(11) NOT NULL,
+  `id_usuario` int(4) NOT NULL,
   `nombre_usu` varchar(30) NOT NULL,
   `contraseña_usu` varchar(64) NOT NULL,
   `estado` tinyint(1) NOT NULL,
   `id_rol` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
 --
 -- Índices para tablas volcadas
 --
@@ -164,6 +232,13 @@ ALTER TABLE `clientes`
   ADD PRIMARY KEY (`id_cliente`),
   ADD KEY `id_usuario` (`id_usuario`),
   ADD KEY `id_persona` (`id_persona`);
+
+--
+-- Indices de la tabla `costos`
+--
+ALTER TABLE `costos`
+  ADD PRIMARY KEY (`id_costo`),
+  ADD KEY `id_mon` (`id_mon`);
 
 --
 -- Indices de la tabla `cuentas`
@@ -183,6 +258,20 @@ ALTER TABLE `empleados`
   ADD KEY `id_usuario` (`id_usuario`),
   ADD KEY `id_sucursal` (`id_sucursal`),
   ADD KEY `id_persona` (`id_persona`);
+
+--
+-- Indices de la tabla `intereses`
+--
+ALTER TABLE `intereses`
+  ADD PRIMARY KEY (`id_interes`),
+  ADD KEY `id_mon` (`id_mon`);
+
+--
+-- Indices de la tabla `mantenimientos`
+--
+ALTER TABLE `mantenimientos`
+  ADD PRIMARY KEY (`id_mantenimiento`),
+  ADD KEY `id_mon` (`id_mon`);
 
 --
 -- Indices de la tabla `movimientos`
@@ -213,6 +302,12 @@ ALTER TABLE `sucursales`
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
+-- Indices de la tabla `tipo_moneda`
+--
+ALTER TABLE `tipo_moneda`
+  ADD PRIMARY KEY (`id_mon`);
+
+--
 -- Indices de la tabla `tipo_movimiento`
 --
 ALTER TABLE `tipo_movimiento`
@@ -233,7 +328,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `costos`
+--
+ALTER TABLE `costos`
+  MODIFY `id_costo` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `cuentas`
@@ -245,7 +346,19 @@ ALTER TABLE `cuentas`
 -- AUTO_INCREMENT de la tabla `empleados`
 --
 ALTER TABLE `empleados`
-  MODIFY `id_empleado` int(4) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_empleado` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT de la tabla `intereses`
+--
+ALTER TABLE `intereses`
+  MODIFY `id_interes` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `mantenimientos`
+--
+ALTER TABLE `mantenimientos`
+  MODIFY `id_mantenimiento` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `movimientos`
@@ -257,7 +370,7 @@ ALTER TABLE `movimientos`
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1002;
+  MODIFY `id_persona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -272,6 +385,12 @@ ALTER TABLE `sucursales`
   MODIFY `id_sucursal` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT de la tabla `tipo_moneda`
+--
+ALTER TABLE `tipo_moneda`
+  MODIFY `id_mon` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `tipo_movimiento`
 --
 ALTER TABLE `tipo_movimiento`
@@ -281,7 +400,7 @@ ALTER TABLE `tipo_movimiento`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Restricciones para tablas volcadas
@@ -293,6 +412,12 @@ ALTER TABLE `usuarios`
 ALTER TABLE `clientes`
   ADD CONSTRAINT `clientes_ibfk_1` FOREIGN KEY (`id_persona`) REFERENCES `persona` (`id_persona`),
   ADD CONSTRAINT `clientes_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
+
+--
+-- Filtros para la tabla `costos`
+--
+ALTER TABLE `costos`
+  ADD CONSTRAINT `costos_ibfk_1` FOREIGN KEY (`id_mon`) REFERENCES `tipo_moneda` (`id_mon`);
 
 --
 -- Filtros para la tabla `cuentas`
@@ -310,6 +435,18 @@ ALTER TABLE `empleados`
   ADD CONSTRAINT `empleados_ibfk_1` FOREIGN KEY (`id_persona`) REFERENCES `persona` (`id_persona`),
   ADD CONSTRAINT `empleados_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`),
   ADD CONSTRAINT `empleados_ibfk_3` FOREIGN KEY (`id_sucursal`) REFERENCES `sucursales` (`id_sucursal`);
+
+--
+-- Filtros para la tabla `intereses`
+--
+ALTER TABLE `intereses`
+  ADD CONSTRAINT `intereses_ibfk_1` FOREIGN KEY (`id_mon`) REFERENCES `tipo_moneda` (`id_mon`);
+
+--
+-- Filtros para la tabla `mantenimientos`
+--
+ALTER TABLE `mantenimientos`
+  ADD CONSTRAINT `mantenimientos_ibfk_1` FOREIGN KEY (`id_mon`) REFERENCES `tipo_moneda` (`id_mon`);
 
 --
 -- Filtros para la tabla `movimientos`

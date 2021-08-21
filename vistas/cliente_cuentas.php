@@ -44,15 +44,6 @@ if ($_SESSION['rol']==3 OR $_SESSION['rol']==2) {
               </thead>
               <tbody>
               </tbody>
-              <tfoot>
-              <th>Opciones</th>
-                <th>Número</th>
-                <th>Saldo</th>
-                <th>Moneda</th>
-                <th>Fecha de creación</th>
-                <th>Numero de movimientos</th>
-                <th>Estado</th>
-              </tfoot>   
             </table>
           </div>
           <?php 

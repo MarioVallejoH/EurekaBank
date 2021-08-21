@@ -36,12 +36,7 @@ if (!empty($_SESSION['rol'])) {
                   <h2 class="heading-section">EurekaBank</h2>
                 </div>
               </div>
-              <!-- <div class="row justify-content-center">
-              Creado en el año 2021 con la finalidad de brindar financiamiento especial 
-              al sector agrícola del país, EurekaBank se ha convertido en la entidad financiera 
-              líder en el sector debido a sus excelentes planes de financiación para campesinos 
-              y empresas agrícolas. 
-              </div> -->
+
             </div>
 
             </div>

@@ -21,18 +21,13 @@ SET time_zone = "+00:00";
 -- Base de datos: `dbsistema`
 --
 
--- --------------------------------------------------------
 
 
---
--- Volcado de datos para la tabla `persona`
---
-
-INSERT INTO `persona` (`id_persona`, `nombre_per`, `primer_ape_per`, `segundo_ape_per`, `cedula_per`, `ciudad_resid_per`, `dir_resid_per`) VALUES
-(1, 'internet', 'internet', 'internet', 'internet', 'internet', 'internet');
 
 
--- --------------------------------------------------------
+INSERT INTO `tipo_moneda` (`id_mon`, `desc_mon`) VALUES
+(1, 'USD'),
+(2, 'COP');
 
 --
 -- Volcado de datos para la tabla `roles`
@@ -43,7 +38,18 @@ INSERT INTO `roles` (`id_rol`, `nombre_rol`) VALUES
 (2, 'empleados'),
 (3, 'clientes');
 
--- --------------------------------------------------------
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`id_usuario`, `nombre_usu`, `contraseña_usu`, `estado`, `id_rol`) VALUES
+(1, '1', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 1, 1),
+(2, '2', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 1, 1),
+(3, '3', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 1, 1),
+(4, '4', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 1, 1),
+(5, '5', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 1, 1),
+(6, '9999', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 0, 2);
 
 --
 -- Volcado de datos para la tabla `sucursales`
@@ -56,7 +62,59 @@ INSERT INTO `sucursales` (`id_sucursal`, `nombre_sucur`, `ciudad_sucur`, `direcc
 (4, 'Succursal 4', 'Barranquilla', 'Calle 57 # 36 -7', 0, 4),
 (5, 'Succursal 5', 'Cartagena', 'Calle 57 # 36 -7', 0, 5);
 
--- --------------------------------------------------------
+
+
+
+
+
+--
+-- Volcado de datos para la tabla `persona`
+--
+
+INSERT INTO `persona` (`id_persona`, `nombre_per`, `primer_ape_per`, `segundo_ape_per`, `cedula_per`, `ciudad_resid_per`, `dir_resid_per`) VALUES
+(1, 'internet', 'internet', 'internet', 'internet', 'internet', 'internet');
+
+
+--
+-- Volcado de datos para la tabla `costos`
+--
+
+INSERT INTO `costos` (`id_costo`, `id_mon`, `valor`) VALUES
+(1, 2, 2000),
+(2, 1, 0.6);
+
+--
+-- Volcado de datos para la tabla `empleados`
+--
+
+INSERT INTO `empleados` (`id_empleado`, `correo_emp`, `telefono_emp`, `fecha_creacion_emp`, `fecha_baja_emp`, `id_persona`, `id_usuario`, `id_sucursal`) VALUES
+(1, 'internet', 'internet', '2021-08-20', NULL, 1, 6, 1);
+
+--
+-- Volcado de datos para la tabla `intereses`
+--
+
+INSERT INTO `intereses` (`id_interes`, `id_mon`, `valor`) VALUES
+(1, 1, '0.60000000'),
+(2, 2, '0.70000000');
+
+--
+-- Volcado de datos para la tabla `mantenimientos`
+--
+
+INSERT INTO `mantenimientos` (`id_mantenimiento`, `id_mon`, `valor`) VALUES
+(1, 2, 7000),
+(2, 1, 2.5);
+
+
+
+
+
+
+--
+-- Volcado de datos para la tabla `tipo_moneda`
+--
+
 
 --
 -- Volcado de datos para la tabla `tipo_movimiento`
@@ -73,28 +131,6 @@ INSERT INTO `tipo_movimiento` (`id_tipo_mov`, `estado`, `nombre_mov`, `accion_ti
 (8, 1, 'ITF', 'Salida');
 
 -- --------------------------------------------------------
-
-
-
-
---
--- Volcado de datos para la tabla `usuarios`
---
-
-INSERT INTO `usuarios` (`id_usuario`, `nombre_usu`, `contraseña_usu`, `estado`, `id_rol`) VALUES
-(1, '1', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 1, 1),
-(2, '2', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 1, 1),
-(3, '3', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 1, 1),
-(4, '4', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 1, 1),
-(5, '5', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 1, 1),
-(6, '9999', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 0, 2);
-
---
--- Volcado de datos para la tabla `empleados`
---
-
-INSERT INTO `empleados` (`id_empleado`, `correo_emp`, `telefono_emp`, `fecha_creacion_emp`, `fecha_baja_emp`, `id_persona`, `id_usuario`, `id_sucursal`) VALUES
-(1, 'internet', 'internet', '2021-08-20', NULL, 1, 6, 1);
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

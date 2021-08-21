@@ -30,6 +30,10 @@ switch ($_GET["op"]) {
 		// recibimos el id del cliente enviado por get
 		$id_cliente = $_GET["id_cliente"];
 
+		// verificamos que contenga un valor
+
+		
+
 		// cargamos la fecha actual
 		$date = date('Y-m-d h:i:s');
 
@@ -39,6 +43,8 @@ switch ($_GET["op"]) {
 		$clave_cta      =isset($_POST["clave_cta"])? limpiarCadena($_POST["clave_cta"]):"";
 
 		// realizamos el movimiento inicial
+
+
 
 		
 		// verificamos que el saldo sea '' y lo volvemos cero
@@ -65,18 +71,13 @@ switch ($_GET["op"]) {
 			
 			//realizamos el registro del movimiento
 			$rspta = $movimientos->insertar($saldo_cta,'',$date,$id_empleado,$id_cta,'1');
-			if($rspta){
-				// actualizamos el numero de cuentas de la sucursal
+
+				// aumentamos el contador de cuentas de la sucursal
 				require_once "../modelos/sucursales.php";
 				$sucursal = new sucursal();
 				$rspta = $sucursal->incrementar_cuentas($id_sucursal);
 				
 				echo $rspta ? 'Consulta exitosa':'Error en la consulta';
-				
-			}else{
-				echo "Error al registrar el movimiento inicial de la cuenta";
-			}
-
 			
 
 			
@@ -158,7 +159,7 @@ switch ($_GET["op"]) {
 
 			if($_SESSION['rol']==3){
 				// pasamos el id del empleado internet
-				$id_empleado = 9999;
+				$id_empleado = 1;
 			}elseif($_SESSION['rol']==2){
 				// buscamos el id del empleado logueado usando el modelo de empleado
 				
