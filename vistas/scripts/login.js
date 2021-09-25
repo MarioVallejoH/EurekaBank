@@ -16,7 +16,8 @@ $("#frmAcceso").on('submit', function(e)
         function(data)
         {
             // verificamos que la respuesta de la verificacion sea exitosa
-           if (data!="null")
+            // console.log(data);
+           if (data=="Exito")
             {
                 //login exitoso
             
@@ -27,6 +28,7 @@ $("#frmAcceso").on('submit', function(e)
             }else{
 
                 // datos incorrectos
+                console.log(data);
                 
             	bootbox.alert("Usuario y/o Password incorrectos");
             }

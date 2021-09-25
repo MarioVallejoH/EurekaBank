@@ -107,12 +107,12 @@ if (strlen(session_id())<1)
             }
           ?>
 
-          <?php 
+          <!-- <?php 
             if ($_SESSION['rol']==3) {
             echo '<li><a href="cliente_cuentas.php"><i class="fa  fa-table (alias)"></i> <span>Cuentas - Cliente </span></a>
               </li>';
             }
-          ?>
+          ?> -->
 
         </br>
             
