@@ -100,14 +100,43 @@ switch ($_GET["op"]) {
 
 	case 'desactivar':
 		$id_cta= $_POST['id_cta'];
-		$rspta=$cuenta->desactivar($id_cta);
-		echo $rspta ? "Cuenta anulada correctamente" : "No se pudo anular la cuenta";
+		$rspta = $empleado->obtener_id($_SESSION['id_usuario']);
+
+		// verificamos el exito en la consulta
+		if($rspta){
+			$reg=$rspta->fetch_object();
+			$id_empleado=$reg->id_empleado;
+
+			$rspta=$cuenta->desactivar($id_cta, $id_empleado);
+			echo $rspta;
+		}else{
+			echo 'Error al obtener id_empleado del usuario empleado';
+		}
+		
 	break;
-	case 'activar':
-		$id_cta= $_POST['id_cta'];
-		$rspta=$cuenta->activar($id_cta);
-		echo $rspta ? "Cuenta activada correctamente" : "No se pudo desactivar la cuenta";
-	break;
+	// case 'activar':
+	
+	// 	// $id_cta= $_POST['id_cta'];
+	// 	// $rspta=$cuenta->activar($id_cta);
+	// 	// echo $rspta ? "Cuenta activada correctamente" : "No se pudo desactivar la cuenta";
+
+
+	// 	$id_cta= $_POST['id_cta'];
+	// 	$rspta = $empleado->obtener_id($_SESSION['id_usuario']);
+
+
+	// 	// verificamos el exito en la consulta
+	// 	if($rspta){
+	// 		$reg=$rspta->fetch_object();
+	// 		$id_empleado=$reg->id_empleado;
+
+
+	// 		$rspta=$cuenta->activar($id_cta, $id_empleado, $id_mov);
+	// 		echo $rspta;
+	// 	}else{
+	// 		echo '';
+	// 	}
+	// break;
 	
 
 	case 'crearMovimiento':
@@ -268,8 +297,8 @@ switch ($_GET["op"]) {
 			"0"=>(($reg->estado_cta==1)?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_cta.')">
 										<i class="fa fa-eye"></i></button><button class="btn btn-danger btn-xs" 
 										onclick="desactivar('.$reg->id_cta.')"><i class="fa fa-close">'
-										:'<button class="btn btn-primary btn-xs" 
-										onclick="activar('.$reg->id_cta.')"><i class="fa fa-check">'),
+										:'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id_cta.')">
+										<i class="fa fa-eye"></i></button>'),
 			"1"=>$reg->id_cta,
 			"2"=>$reg->saldo_cta,
 			"3"=>$reg->desc_mon,

@@ -18,16 +18,45 @@
 		return ejecutarConsulta_retornarID($sql);;
 	}
 
-	public function desactivar($id_cta){
-		$sql="UPDATE cuentas SET estado_cta='0' WHERE id_cta='$id_cta'";
-		// echo $sql;
-		return ejecutarConsulta($sql);
+	public function desactivar($id_cta,$id_empleado){
+
+		$date = date('Y-m-d h:i:s');
+		
+
+		$sql="INSERT INTO movimientos (importe_mov,cuenta_ref_mov,fecha_creacion_mov,id_empleado,id_cta,id_tipo_mov,
+				estado_mov) VALUES ('0',NULL,'$date','$id_empleado','$id_cta',
+				'2','1')";
+		$id_mov = ejecutarConsulta_retornarID($sql);
+
+		if(!empty($id_mov)){
+
+			
+
+			$sql="UPDATE cuentas SET estado_cta='0' WHERE id_cta='$id_cta'";
+			// echo $sql;
+			$rspta = ejecutarConsulta($sql);
+
+			if ($rspta){
+				return "Cuenta anulada correctamente";
+			}else{
+
+				$sql = "UPDATE movimientos m SET m.estado_mov='0' WHERE m.id_mov='$id_mov'";
+				$rspta = ejecutarConsulta($sql);
+
+				// echo $rspta?'Movimiento cancelado exitosamente':'Exito al cancelar el movimiento';
+
+				return "No se pudo anular la cuenta";
+			}
+		}else{
+			return "Error al registrar el movimiento.";
+		}
+
 	}
 
-	public function activar($id_cta){
-		$sql="UPDATE cuentas SET estado_cta='1' WHERE id_cta='$id_cta'";
-		return ejecutarConsulta($sql);
-	}
+	// public function activar($id_cta, $id_empleado, $id_){
+	// 	$sql="UPDATE cuentas SET estado_cta='1' WHERE id_cta='$id_cta'";
+	// 	return ejecutarConsulta($sql);
+	// }
 
 	//funcion para obtener el saldo, tipo de moneda y num_mov_cuenta
 	public function info($id_cta){

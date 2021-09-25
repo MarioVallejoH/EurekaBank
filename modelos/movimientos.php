@@ -9,8 +9,11 @@
 
 	}
 
-	//metodo insertar registro
+	//metodo insertar movimientos desde el menu de la cuenta
 	public function insertar($importe_mov,$cuenta_ref_mov,$fecha_creacion_mov,$id_empleado,$id_cta,$id_tipo_mov){
+
+
+		// TODO : Verify if account is ennabled before doing this
 
 		// verificamos si existe cuenta de ref y si el tipo de mov la requiere
 		// echo $id_tipo_mov;
@@ -175,10 +178,12 @@
 	public function listarMovimentos($id_cta){
 		$sql="SELECT m.id_mov,m.fecha_creacion_mov,m.importe_mov,m.cuenta_ref_mov,m.estado_mov,t.nombre_mov,t.accion_tipo_mov,e.id_empleado
 		FROM movimientos m INNER JOIN tipo_movimiento t ON t.id_tipo_mov=m.id_tipo_mov INNER JOIN empleados e 
-		ON e.id_empleado=m.id_empleado WHERE m.id_cta='$id_cta'";
+		ON e.id_empleado=m.id_empleado WHERE m.id_cta='$id_cta' AND 't.id_tipo_mov'<>'2'";
 		// echo $sql;
 		return ejecutarConsulta($sql);
 	}
+
+
 
 	// obtener info de valores de IFT
 	public function info_IFT($id_mon){

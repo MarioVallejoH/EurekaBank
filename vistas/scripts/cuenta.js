@@ -110,6 +110,16 @@ function cargar_datos_cuenta(){
 			$("#fecha_hora").val(data.fecha_creacion_cta);
 			$("#clave_cta").val(data.clave_cta);
 
+			// console.log(data.estado_cta);
+
+			if(data.estado_cta==0){
+				$("#btnAgregarArt").hide();
+			}else{
+				$("#btnAgregarArt").show();
+				// console.log('here')
+			}
+			
+
 		});
 	// listamos los movimientos que tiene la cuenta
 	listar_movimientos(id_cta);

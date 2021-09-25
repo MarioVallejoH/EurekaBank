@@ -13,6 +13,7 @@
 
         public function verificar($login,$clave){
 
+            # last AND condition is for restrict Client login
             $sql="SELECT id_usuario,nombre_usu,id_rol AS rol  FROM usuarios WHERE nombre_usu='$login' AND contraseña_usu='$clave' AND estado='1' AND id_rol<>'3'";
             $rspta = ejecutarConsulta($sql);
 
