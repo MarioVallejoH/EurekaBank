@@ -66,24 +66,24 @@ switch ($_GET["op"]) {
 			echo 'Error al obtener id_empleado del usuario empleado';
 		}
 
-		$id_cta=$cuenta->insertar($saldo_cta,$date,$clave_cta,$id_tipo_mon,$id_empleado,$id_cliente,$id_sucursal); 
+		$id_cta=$cuenta->insertar(0,$date,$clave_cta,$id_tipo_mon,$id_empleado,$id_cliente,$id_sucursal); 
 		if(!empty($id_cta)){
 			
 			//realizamos el registro del movimiento
 			$rspta = $movimientos->insertar($saldo_cta,'',$date,$id_empleado,$id_cta,'1');
 
-				// aumentamos el contador de cuentas de la sucursal
-				require_once "../modelos/sucursales.php";
-				$sucursal = new sucursal();
-				$rspta = $sucursal->incrementar_cuentas($id_sucursal);
-				
-				echo $rspta ? 'Consulta exitosa':'Error en la consulta';
+			// aumentamos el contador de cuentas de la sucursal
+			require_once "../modelos/sucursales.php";
+			$sucursal = new sucursal();
+			$rspta = $sucursal->incrementar_cuentas($id_sucursal);
+			
+			echo $rspta ? 'Consulta exitosa':'Error en la consulta';
 			
 
 			
 
 
-			echo $rspta? 'Exito!' :$rspta;
+			// echo $rspta? 'Exito!' :$rspta;
 		}else{
 			echo "No se pudo registrar los datos";
 		}

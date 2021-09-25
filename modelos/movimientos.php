@@ -36,7 +36,7 @@
 					// echo $sql;
 					$resp = ejecutarConsulta($sql);
 					if($resp){
-						echo $resp;
+						return $resp;
 					}else{
 
 						// devolvemos el saldo quitado
@@ -49,9 +49,9 @@
 							$sql = "UPDATE movimientos m SET m.estado_mov='0' WHERE m.id_mov='$id_mov'";
 							$rspta = ejecutarConsulta($sql);
 
-							echo $rspta?'Movimiento cancelado exitosamente':'Exito al cancelar el movimiento';
+							return $rspta?'Movimiento cancelado exitosamente':'Exito al cancelar el movimiento';
 						}else{
-							echo 'Error al devolver el saldo a su estado inicial';
+							return 'Error al devolver el saldo a su estado inicial';
 						}
 
 						
@@ -62,11 +62,11 @@
 					$sql = "UPDATE movimientos m SET m.estado_mov='0' WHERE m.id_mov='$id_mov'";
 					$rspta = ejecutarConsulta($sql);
 
-					echo $rspta?'Movimiento cancelado exitosamente':'Exito al cancelar el movimiento';
+					return $rspta?'Movimiento cancelado exitosamente':'Exito al cancelar el movimiento';
 				}
 			}else{
 				// echo $sql;
-				echo "Error al registrar el movimiento";
+				return "Error al registrar el movimiento";
 			}
 		}else{
 			$sql="INSERT INTO movimientos (importe_mov,cuenta_ref_mov,fecha_creacion_mov,id_empleado,id_cta,id_tipo_mov,
@@ -90,14 +90,14 @@
 					// echo $resp;
 					if($resp){
 						
-						echo $resp;
+						return $resp;
 
 					}else{
 						// cancelamos el movimiento 
 						$sql = "UPDATE movimientos m SET m.estado_mov='0' WHERE m.id_mov='$id_mov'";
 						$rspta = ejecutarConsulta($sql);
 
-						echo $rspta?'Movimiento cancelado exitosamente':'Exito al cancelar el movimiento';
+						return $rspta?'Movimiento cancelado exitosamente':'Exito al cancelar el movimiento';
 					}
 
 				// salida
@@ -109,14 +109,14 @@
 					// verificamos el exito de la consulta
 					if($resp){
 						
-						echo $resp;
+						return $resp;
 
 					}else{
 						// cancelamos el movimiento 
 						$sql = "UPDATE movimientos m SET m.estado_mov='0' WHERE m.id_mov='$id_mov'";
 						$rspta = ejecutarConsulta($sql);
 
-						echo $rspta?'Movimiento cancelado exitosamente':'Exito al cancelar el movimiento';
+						return $rspta?'Movimiento cancelado exitosamente':'Exito al cancelar el movimiento';
 					}
 				}
 				
